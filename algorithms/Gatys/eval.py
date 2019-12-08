@@ -30,7 +30,6 @@ def transfer(content_path, style_path, output_path):
     style = get_image_tensor_from_path(style_path, encoder=vgg_encoder, scale=True)
     net = VggFeatureExtractor().to(device).eval()
     target = content.clone().requires_grad_(True)
-    print(target, torch.mean(target), torch.sum(target))
     optimizer = torch.optim.Adam([target], lr=Gatys.learning_rate)
     for i in tqdm(range(Gatys.training_steps)):
         content_layer, _ = net(content)
