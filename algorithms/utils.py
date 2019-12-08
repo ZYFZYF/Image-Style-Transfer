@@ -24,10 +24,12 @@ def get_output_absolute_path(filename):
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 default_encoder = transforms.Compose([transforms.ToTensor()])
 default_decoder = transforms.ToPILImage()
-vgg_encoder = transforms.Compose([transforms.ToTensor(),
-                                  transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
-vgg_decoder = transforms.Compose([transforms.Normalize(mean=[-2.118, -2.036, -1.804], std=[4.366, 4.464, 4.444]),
-                                  transforms.ToPILImage()])
+# vgg_encoder = transforms.Compose([transforms.ToTensor(),
+#                                   transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])])
+# vgg_decoder = transforms.Compose([transforms.Normalize(mean=[-2.118, -2.036, -1.804], std=[4.366, 4.464, 4.444]),
+#                                   transforms.ToPILImage()])
+vgg_encoder = default_encoder
+vgg_decoder = default_decoder
 
 
 def get_image_tensor_from_path(image_path, encoder=default_encoder, scale=True, output_size=(256, 256)):
@@ -60,8 +62,9 @@ def tensor_image_show(tensor, title=None):
     plt.pause(0.001)
 
 
-def transfer_result_show(content_tensor, style_tensor, target_tensor, target_show_name):
+def transfer_result_show(content_tensor, style_tensor, target_tensor, target_show_name, save_file=None):
     content = get_image_from_tensor(content_tensor)
+    plt.cla()
     plt.subplot(1, 3, 1)
     plt.imshow(content)
     plt.title('Content')
@@ -79,7 +82,10 @@ def transfer_result_show(content_tensor, style_tensor, target_tensor, target_sho
     plt.title(target_show_name)
     plt.xticks([])
     plt.yticks([])
-    plt.show()
+    plt.show(block=False)
+    plt.pause(0.01)
+    if save_file:
+        plt.savefig(save_file)
 
 
 def save_tensor_image(tensor, image_path):

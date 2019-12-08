@@ -26,11 +26,11 @@ class VggFeatureExtractor(nn.Module):
 
 
 def transfer(content_path, style_path, output_path):
-    print(content_path, style_path, output_path)
     content = get_image_tensor_from_path(content_path, encoder=vgg_encoder, scale=True)
     style = get_image_tensor_from_path(style_path, encoder=vgg_encoder, scale=True)
     net = VggFeatureExtractor().to(device).eval()
-    target = content.clone()
+    target = content.clone().requires_grad_(True)
+    print(target, torch.mean(target), torch.sum(target))
     optimizer = torch.optim.Adam([target], lr=Gatys.learning_rate)
     for i in tqdm(range(Gatys.training_steps)):
         content_layer, _ = net(content)
@@ -39,18 +39,19 @@ def transfer(content_path, style_path, output_path):
         content_loss = torch.mean((target_content_layer - content_layer) ** 2)
         style_loss = 0
         for target_layer, style_layer in zip(target_style_layers, style_layers):
-            _, channels, height, width = target_layer.size()
             target_layer = target_layer.squeeze(0).reshape(target_layer.shape[1], -1)
             style_layer = style_layer.squeeze(0).reshape(style_layer.shape[1], -1)
             target_gram = torch.mm(target_layer, target_layer.t())
             style_gram = torch.mm(style_layer, style_layer.t())
-            style_loss += torch.mean((target_gram - style_gram) ** 2) / len(target_style_layers)
+            style_loss += torch.mean((target_gram - style_gram) ** 2) / len(target_style_layers) / target_layer.shape[0]/target_layer.shape[1]
         total_loss = Gatys.alpha * content_loss + Gatys.beta * style_loss
         optimizer.zero_grad()
         total_loss.backward()
         optimizer.step()
         if (i + 1) % Gatys.show_step == 0:
+            print('now {}/{} content loss is {}, style loss iss {} and total loss is {}'.format(i+1, Gatys.training_steps, content_loss, style_loss,total_loss.item()))
             transfer_result_show(content, style, target, 'Target {}/{}'.format(i + 1, Gatys.training_steps))
+    transfer_result_show(content, style, target, 'final', save_file='_show'.join(os.path.splitext(output_path)))
     save_tensor_image(target, output_path)
 
 
