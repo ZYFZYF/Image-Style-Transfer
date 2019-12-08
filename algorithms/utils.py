@@ -59,10 +59,13 @@ def tensor_image_show(tensor, title=None):
     if title is not None:
         plt.title(title)
     plt.pause(0.001)
+ 
 
 plt.rcParams['figure.figsize'] = (10, 6)
 plt.rcParams['savefig.dpi'] = 300
 plt.rcParams['figure.dpi'] = 300
+
+
 def transfer_result_show(content_tensor, style_tensor, target_tensor, target_show_name, save_file=None):
     content = get_image_from_tensor(content_tensor)
     plt.cla()

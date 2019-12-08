@@ -42,17 +42,22 @@ def transfer(content_path, style_path, output_path):
             style_layer = style_layer.squeeze(0).reshape(style_layer.shape[1], -1)
             target_gram = torch.mm(target_layer, target_layer.t())
             style_gram = torch.mm(style_layer, style_layer.t())
-            style_loss += torch.mean((target_gram - style_gram) ** 2) / len(target_style_layers) / target_layer.shape[0]/target_layer.shape[1]
+            style_loss += torch.mean((target_gram - style_gram) ** 2) / len(target_style_layers) / target_layer.shape[
+                0] / target_layer.shape[1]
         total_loss = Gatys.alpha * content_loss + Gatys.beta * style_loss
         optimizer.zero_grad()
         total_loss.backward()
         optimizer.step()
         if (i + 1) % Gatys.show_step == 0:
-            print('now {}/{} content loss is {}, style loss iss {} and total loss is {}'.format(i+1, Gatys.training_steps, content_loss, style_loss,total_loss.item()))
+            print('now {}/{} content loss is {}, style loss iss {} and total loss is {}'.format(i + 1,
+                                                                                                Gatys.training_steps,
+                                                                                                content_loss,
+                                                                                                style_loss,
+                                                                                                total_loss.item()))
             transfer_result_show(content, style, target, 'Target {}/{}'.format(i + 1, Gatys.training_steps))
     transfer_result_show(content, style, target, 'final', save_file='_show'.join(os.path.splitext(output_path)))
     save_tensor_image(target, output_path)
 
-
+ 
 if __name__ == '__main__':
     transfer(get_content_absolute_path('1.png'), get_style_absolute_path('1.png'), get_output_absolute_path('1x1.png'))
