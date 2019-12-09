@@ -4,6 +4,7 @@ from torchvision import models
 from algorithms.utils import *
 from algorithms.config import Gatys
 from tqdm import tqdm
+import os
 
 
 class VggFeatureExtractor(nn.Module):
@@ -54,10 +55,21 @@ def transfer(content_path, style_path, output_path):
                                                                                                 content_loss,
                                                                                                 style_loss,
                                                                                                 total_loss.item()))
-            transfer_result_show(content, style, target, 'Target {}/{}'.format(i + 1, Gatys.training_steps))
-    transfer_result_show(content, style, target, 'final', save_file='_show'.join(os.path.splitext(output_path)))
+            # transfer_result_show(content, style, target, 'Target {}/{}'.format(i + 1, Gatys.training_steps))
+    transfer_result_show(content, style, target, 'Transfer', save_file='_show'.join(os.path.splitext(output_path)))
     save_tensor_image(target, output_path)
 
- 
+
+def eval_all():
+    for content in os.listdir(CONTENT_PATH):
+        for style in os.listdir(STYLE_PATH):
+            output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Gatys.png'
+            if os.path.exists(get_output_absolute_path(output)):
+                continue
+            transfer(get_content_absolute_path(content), get_style_absolute_path(style),
+                     get_output_absolute_path(output))
+
+
 if __name__ == '__main__':
-    transfer(get_content_absolute_path('1.png'), get_style_absolute_path('1.png'), get_output_absolute_path('1x1.png'))
+    eval_all()
+    # transfer(get_content_absolute_path('2.png'), get_style_absolute_path('1.png'), get_output_absolute_path('2x1.png'))l
