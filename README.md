@@ -14,6 +14,13 @@
      - 同步进行中
  - 实时风格转换demo ×
 
+## Dataset
+
+ - Content 
+    MSCOCO 2017 Val images [5K/1GB] val2017 5000张
+ - Style
+    Kaggle https:// www.kaggle.com/c/painter-by-numbers test9 8491张
+
 ## References
 
  - https://github.com/yunjey/pytorch-tutorial/blob/master/tutorials/03-advanced/neural_style_transfer/main.py#L84-L94

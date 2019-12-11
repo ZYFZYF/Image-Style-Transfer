@@ -1,8 +1,8 @@
 import torch
 from torch import nn
 from torchvision import models
-from algorithms.utils import *
-from algorithms.config import Gatys
+from utils import *
+from config import Gatys
 from tqdm import tqdm
 import os
 
