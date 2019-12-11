@@ -4,9 +4,9 @@
 ## TODO
  - 论文复现
      - [Gatys](https://arxiv.org/abs/1508.06576)方法复现 部分完成
-        - 基本效果已实现
-        - 修改loss（增加光滑项）
-        - 用Chen中的style swap操作来计算loss
+        - 基本效果 √
+        - 修改loss（增加光滑项）×
+        - 用Chen中的style swap操作来计算loss ×
      - [Johnson](https://arxiv.org/abs/1603.08155)方法复现 ×
      - [Shen](https://arxiv.org/abs/1709.04111)方法复现 ×
      - [Chen](https://arxiv.org/abs/1612.04337)方法复现 ×
@@ -17,3 +17,4 @@
 ## References
 
  - https://github.com/yunjey/pytorch-tutorial/blob/master/tutorials/03-advanced/neural_style_transfer/main.py#L84-L94
+ - https://github.com/irasin/Pytorch_Style_Swap
