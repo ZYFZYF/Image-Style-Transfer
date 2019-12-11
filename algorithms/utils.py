@@ -4,21 +4,24 @@ from PIL import Image
 import matplotlib.pyplot as plt
 import os
 
-CONTENT_PATH = os.path.dirname(os.path.dirname(__file__)) + '/image/content/'
-STYLE_PATH = os.path.dirname(os.path.dirname(__file__)) + '/image/style/'
-OUTPUT_PATH = os.path.dirname(os.path.dirname(__file__)) + '/image/output/'
+CONTENT_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/content/'
+STYLE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/style/'
+OUTPUT_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/output/'
+
+TRAIN_CONTENT_DIR = os.path.dirname(os.path.dirname(__file__)) + '/dataset/content/'
+TRAIN_STYLE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/dataset/style/'
 
 
 def get_content_absolute_path(filename):
-    return CONTENT_PATH + filename
+    return CONTENT_DIR + filename
 
 
 def get_style_absolute_path(filename):
-    return STYLE_PATH + filename
+    return STYLE_DIR + filename
 
 
 def get_output_absolute_path(filename):
-    return OUTPUT_PATH + filename
+    return OUTPUT_DIR + filename
 
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -101,7 +104,8 @@ def save_tensor_image(tensor, image_path):
 def smooth_loss(img):
     h_loss = torch.sum(torch.pow(img[:, :, :, :-1] - img[:, :, :, 1:], 2))
     w_loss = torch.sum(torch.pow(img[:, :, :-1, :] - img[:, :, 1:, :], 2))
-    return (h_loss + w_loss) / (img.shape[1] * img.shape[2] * img.shape[3])
+    # 之所以除以2是因为本质上是算了两个差的和
+    return (h_loss + w_loss) / (img.shape[1] * img.shape[2] * img.shape[3] * 2)
 
 
 if __name__ == '__main__':

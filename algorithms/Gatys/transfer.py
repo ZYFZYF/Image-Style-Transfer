@@ -62,10 +62,12 @@ def transfer(content_path, style_path, output_path):
     save_tensor_image(target, output_path)
 
 
-def eval_all():
-    for content in os.listdir(CONTENT_PATH):
+def transfer_all():
+    if not os.path.exists(OUTPUT_DIR):
+        os.mkdir(OUTPUT_DIR)
+    for content in os.listdir(CONTENT_DIR):
         if not content.endswith('DS_Store'):
-            for style in os.listdir(STYLE_PATH):
+            for style in os.listdir(STYLE_DIR):
                 if not style.endswith('DS_Store'):
                     output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Gatys.png'
                     if os.path.exists(get_output_absolute_path(output)):
@@ -75,6 +77,6 @@ def eval_all():
 
 
 if __name__ == '__main__':
-    eval_all()
+    transfer_all()
     # transfer(get_content_absolute_path('2.png'), get_style_absolute_path('1.png'), get_output_absolute_path('2x1.png'))l
     # print(models.vgg19(pretrained=True).features)

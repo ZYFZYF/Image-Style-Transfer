@@ -5,3 +5,10 @@ class Gatys:
     alpha = 1.0
     beta = 100.0
     gamma = 0.5
+
+
+class Chen:
+    training_steps = 100000
+    show_step = 500
+    learning_rate = 0.1
+    gamma = 0.001
