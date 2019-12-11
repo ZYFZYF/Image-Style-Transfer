@@ -4,3 +4,4 @@ class Gatys:
     learning_rate = 0.03
     alpha = 1.0
     beta = 100.0
+    gamma = 0.5

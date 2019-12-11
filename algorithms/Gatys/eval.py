@@ -36,16 +36,18 @@ def transfer(content_path, style_path, output_path):
         content_layer, _ = net(content)
         target_content_layer, target_style_layers = net(target)
         _, style_layers = net(style)
-        content_loss = torch.mean((target_content_layer - content_layer) ** 2)
+        content_loss = torch.mean(torch.pow(target_content_layer - content_layer, 2))
         style_loss = 0
         for target_layer, style_layer in zip(target_style_layers, style_layers):
             target_layer = target_layer.squeeze(0).reshape(target_layer.shape[1], -1)
             style_layer = style_layer.squeeze(0).reshape(style_layer.shape[1], -1)
             target_gram = torch.mm(target_layer, target_layer.t())
             style_gram = torch.mm(style_layer, style_layer.t())
-            style_loss += torch.mean((target_gram - style_gram) ** 2) / len(target_style_layers) / target_layer.shape[
-                0] / target_layer.shape[1]
-        total_loss = Gatys.alpha * content_loss + Gatys.beta * style_loss
+            style_loss += torch.mean(torch.pow(target_gram - style_gram, 2)) / len(target_style_layers) / \
+                          target_layer.shape[
+                              0] / target_layer.shape[1]
+        normalize_loss = smooth_loss(target)
+        total_loss = Gatys.alpha * content_loss + Gatys.beta * style_loss + Gatys.gamma * normalize_loss
         optimizer.zero_grad()
         total_loss.backward()
         optimizer.step()
@@ -62,14 +64,17 @@ def transfer(content_path, style_path, output_path):
 
 def eval_all():
     for content in os.listdir(CONTENT_PATH):
-        for style in os.listdir(STYLE_PATH):
-            output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Gatys.png'
-            if os.path.exists(get_output_absolute_path(output)):
-                continue
-            transfer(get_content_absolute_path(content), get_style_absolute_path(style),
-                     get_output_absolute_path(output))
+        if not content.endswith('DS_Store'):
+            for style in os.listdir(STYLE_PATH):
+                if not style.endswith('DS_Store'):
+                    output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Gatys.png'
+                    if os.path.exists(get_output_absolute_path(output)):
+                        continue
+                    transfer(get_content_absolute_path(content), get_style_absolute_path(style),
+                             get_output_absolute_path(output))
 
 
 if __name__ == '__main__':
     eval_all()
     # transfer(get_content_absolute_path('2.png'), get_style_absolute_path('1.png'), get_output_absolute_path('2x1.png'))l
+    # print(models.vgg19(pretrained=True).features)

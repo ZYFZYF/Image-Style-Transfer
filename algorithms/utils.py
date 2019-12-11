@@ -59,7 +59,7 @@ def tensor_image_show(tensor, title=None):
     if title is not None:
         plt.title(title)
     plt.pause(0.001)
- 
+
 
 plt.rcParams['figure.figsize'] = (10, 6)
 plt.rcParams['savefig.dpi'] = 300
@@ -95,6 +95,13 @@ def transfer_result_show(content_tensor, style_tensor, target_tensor, target_sho
 def save_tensor_image(tensor, image_path):
     image = get_image_from_tensor(tensor)
     image.save(image_path)
+
+
+# 光滑正则项，为了让图片显得更加自然、光滑以及减少突变
+def smooth_loss(img):
+    h_loss = torch.sum(torch.pow(img[:, :, :, :-1] - img[:, :, :, 1:], 2))
+    w_loss = torch.sum(torch.pow(img[:, :, :-1, :] - img[:, :, 1:, :], 2))
+    return (h_loss + w_loss) / (img.shape[1] * img.shape[2] * img.shape[3])
 
 
 if __name__ == '__main__':
