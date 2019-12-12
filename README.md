@@ -18,9 +18,9 @@
 ## Dataset
 
  - Content 
-    MSCOCO 2017 Val images [5K/1GB] val2017 5000张
+    MSCOCO 2017 Val images [5K/1GB] and Test images [41K/6GB] 共45670张
  - Style
-    Kaggle https:// www.kaggle.com/c/painter-by-numbers test9 8491张
+    Kaggle https:// www.kaggle.com/c/painter-by-numbers test9 共8491张
 
 ## References
 
