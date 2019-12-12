@@ -1,10 +1,16 @@
 from utils import *
 from config import Chen
-from model import *
-from transfer import transfer
+from Chen.model import *
+from Chen.transfer import transfer
 from tqdm import tqdm
 import random
 import numpy as np
+
+
+def get_parameter_number(net):
+    total_num = sum(p.numel() for p in net.parameters())
+    trainable_num = sum(p.numel() for p in net.parameters() if p.requires_grad)
+    return {'Total': total_num, 'Trainable': trainable_num}
 
 
 def train():
@@ -16,12 +22,19 @@ def train():
     encoder = VGGEncoder().to(device)
     decoder = VGGDecoder().to(device)
     optimizer = torch.optim.Adam(decoder.parameters(), lr=Chen.learning_rate)
-
+    print(f'we have {get_parameter_number(decoder)} parameters in VGGDecoder to learn')
     loss_list = []
 
     for i in tqdm(range(Chen.training_steps)):
-        content = get_image_tensor_from_path(train_contents[np.random.randint(len(train_contents))])
-        style = get_image_tensor_from_path(train_styles[np.random.randint(len(train_styles))])
+        while True:
+            rand_content = train_contents[np.random.randint(len(train_contents))]
+            rand_style = train_styles[np.random.randint(len(train_styles))]
+            try:
+                content = get_image_tensor_from_path(rand_content)
+                style = get_image_tensor_from_path(rand_style)
+                break
+            except Exception as e:
+                print(f'get content {rand_content} and style {rand_style} failed')
 
         content_feature = encoder(content)
         style_feature = encoder(style)
@@ -51,15 +64,17 @@ def train():
 
         loss_list.append(total_loss.item())
 
-        if i + 1 % Chen.show_step == 0:
+        if (i + 1) % Chen.show_step == 0:
             torch.save(decoder.state_dict(), 'model.pt')
             transfer(get_content_absolute_path('12.jpg'), get_style_absolute_path('8.jpg'),
-                     get_output_absolute_path(f'12x8_Chen_{i}/{Chen.training_steps}.jpg'))
+                     get_output_absolute_path(f'12x8_Chen_{i + 1}_of_{Chen.training_steps}.jpg'), reload=True)
             plt.plot(range(len(loss_list)), loss_list)
             plt.xlabel('iteration')
             plt.ylabel('loss')
             plt.title('train loss')
             plt.savefig(f'train_loss.png')
+            print(
+                f'now image loss is {image_reconstruction_loss.item()}, feature loss is {feature_reconstruction_loss.item()}, smooth loss is {normalize_loss.item()} and total loss is{total_loss.item()}')
 
 
 if __name__ == '__main__':

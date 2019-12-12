@@ -71,28 +71,29 @@ plt.rcParams['figure.dpi'] = 300
 
 def transfer_result_show(content_tensor, style_tensor, target_tensor, target_show_name, save_file=None):
     content = get_image_from_tensor(content_tensor)
-    plt.cla()
-    plt.subplot(1, 3, 1)
+    fig = plt.figure()
+    plt.sca(fig.add_subplot(1, 3, 1))
     plt.imshow(content)
     plt.title('Content')
     plt.xticks([])
     plt.yticks([])
     style = get_image_from_tensor(style_tensor)
-    plt.subplot(1, 3, 2)
+    plt.sca(fig.add_subplot(1, 3, 2))
     plt.imshow(style)
     plt.title('Style')
     plt.xticks([])
     plt.yticks([])
     target = get_image_from_tensor(target_tensor)
-    plt.subplot(1, 3, 3)
+    plt.sca(fig.add_subplot(1, 3, 3))
     plt.imshow(target)
     plt.title(target_show_name)
     plt.xticks([])
     plt.yticks([])
-    plt.show(block=False)
-    plt.pause(0.01)
+    # plt.show(block=False)
+    # plt.pause(0.01)
     if save_file:
         plt.savefig(save_file)
+    plt.close(fig)
 
 
 def save_tensor_image(tensor, image_path):
