@@ -3,7 +3,10 @@ from utils import *
 
 encoder = VGGEncoder().to(device)
 decoder = VGGDecoder()
-decoder.load_state_dict(torch.load('model.pt'))
+if not torch.cuda.is_available():
+    decoder.load_state_dict(torch.load('model.pt', map_location=lambda storage, loc: storage))
+else:
+    decoder.load_state_dict(torch.load('model.pt'))
 decoder.to(device)
 
 
@@ -11,7 +14,10 @@ def transfer(content_path, style_path, output_path, reload=False):
     if reload:
         global decoder
         decoder = VGGDecoder()
-        decoder.load_state_dict(torch.load('model.pt'))
+        if not torch.cuda.is_available():
+            decoder.load_state_dict(torch.load('model.pt', map_location=lambda storage, loc: storage))
+        else:
+            decoder.load_state_dict(torch.load('model.pt'))
         decoder.to(device)
     content = get_image_tensor_from_path(content_path)
     style = get_image_tensor_from_path(style_path)

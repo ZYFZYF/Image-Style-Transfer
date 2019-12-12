@@ -26,19 +26,32 @@ def train():
     loss_list = []
 
     for i in tqdm(range(Chen.training_steps)):
-        while True:
-            rand_content = train_contents[np.random.randint(len(train_contents))]
-            rand_style = train_styles[np.random.randint(len(train_styles))]
-            try:
-                content = get_image_tensor_from_path(rand_content)
-                style = get_image_tensor_from_path(rand_style)
-                break
-            except Exception as e:
-                print(f'get content {rand_content} and style {rand_style} failed')
+        # 一次训练batch_size个
+        content_list = []
+        style_list = []
+        for j in range(Chen.batch_size):
+            while True:
+                rand_content = train_contents[np.random.randint(len(train_contents))]
+                rand_style = train_styles[np.random.randint(len(train_styles))]
+                try:
+                    content = get_image_tensor_from_path(rand_content)
+                    style = get_image_tensor_from_path(rand_style)
+                    break
+                except Exception as e:
+                    print(f'get content {rand_content} and style {rand_style} failed')
+            content_list.append(content)
+            style_list.append(style)
+        content = torch.cat(content_list, dim=0)
+        style = torch.cat(style_list, dim=0)
 
         content_feature = encoder(content)
         style_feature = encoder(style)
-        target_feature = style_swap(content_feature, style_feature, patch_size=3)
+        # style swap这步操作必须每一维单独做
+        target_features = []
+        for j in range(Chen.batch_size):
+            target_features.append(
+                style_swap(content_feature[j].unsqueeze(0), style_feature[j].unsqueeze(0), patch_size=3))
+        target_feature = torch.cat(target_features, dim=0)
 
         content_reconstruct = decoder(content_feature)
         style_reconstruct = decoder(style_feature)
@@ -69,6 +82,7 @@ def train():
             transfer(get_content_absolute_path('12.jpg'), get_style_absolute_path('8.jpg'),
                      get_output_absolute_path(f'12x8_Chen_{i + 1}_of_{Chen.training_steps}.jpg'), reload=True)
             plt.plot(range(len(loss_list)), loss_list)
+            plt.ylim((0, 10))
             plt.xlabel('iteration')
             plt.ylabel('loss')
             plt.title('train loss')
