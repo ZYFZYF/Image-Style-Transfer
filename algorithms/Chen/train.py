@@ -74,7 +74,7 @@ def train():
             plt.title('train loss')
             plt.savefig(f'train_loss.png')
             print(
-                f'now image loss is {image_reconstruction_loss.item()}, feature loss is {feature_reconstruction_loss.item()}, smooth loss is {normalize_loss.item()} and total loss is{total_loss.item()}')
+                f'now image loss is {image_reconstruction_loss.item()}, feature loss is {feature_reconstruction_loss.item()}, smooth loss is {normalize_loss.item()} and total loss is {total_loss.item()}')
 
 
 if __name__ == '__main__':
