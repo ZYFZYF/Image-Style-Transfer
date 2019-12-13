@@ -8,8 +8,8 @@ class Gatys:
 
 
 class Chen:
-    training_steps = 60000
-    show_step = 100
+    training_steps = 15000
+    show_step = 200
     learning_rate = 0.001
     gamma = 0.001
     batch_size = 4

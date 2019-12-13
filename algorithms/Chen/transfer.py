@@ -1,19 +1,16 @@
 from model import *
 from utils import *
+import time
 
 encoder = VGGEncoder().to(device)
 decoder = VGGDecoder()
-if not torch.cuda.is_available():
-    decoder.load_state_dict(torch.load('model.pt', map_location=lambda storage, loc: storage))
-else:
-    decoder.load_state_dict(torch.load('model.pt'))
-decoder.to(device)
+is_first = True
 
 
 def transfer(content_path, style_path, output_path, reload=False):
-    if reload:
-        global decoder
-        decoder = VGGDecoder()
+    global is_first, decoder
+    if is_first or reload:
+        is_first = False
         if not torch.cuda.is_available():
             decoder.load_state_dict(torch.load('model.pt', map_location=lambda storage, loc: storage))
         else:
@@ -37,11 +34,13 @@ def transfer_all():
         if not content.endswith('DS_Store'):
             for style in os.listdir(STYLE_DIR):
                 if not style.endswith('DS_Store'):
-                    output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Gatys.png'
-                    if os.path.exists(get_output_absolute_path(output)):
-                        continue
+                    output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Chen.png'
+                    # if os.path.exists(get_output_absolute_path(output)):
+                    #     continue
+                    now_time = time.time()
                     transfer(get_content_absolute_path(content), get_style_absolute_path(style),
                              get_output_absolute_path(output))
+                    print(f'generate content{content} and style{style} cost {time.time() - now_time} s')
 
 
 if __name__ == '__main__':

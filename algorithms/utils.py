@@ -34,7 +34,7 @@ vgg_decoder = transforms.Compose([transforms.Normalize(mean=[-2.118, -2.036, -1.
                                   transforms.ToPILImage()])
 
 
-def get_image_tensor_from_path(image_path, encoder=default_encoder, scale=True, output_size=(256, 256)):
+def get_image_tensor_from_path(image_path, encoder=vgg_encoder, scale=True, output_size=(256, 256)):
     image = Image.open(image_path).convert('RGB')
     if scale:
         # 为了简化，一旦缩放这里均认为输出是正方形图片

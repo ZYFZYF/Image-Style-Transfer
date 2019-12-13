@@ -3,8 +3,8 @@ from config import Chen
 from Chen.model import *
 from Chen.transfer import transfer
 from tqdm import tqdm
-import random
 import numpy as np
+import time
 
 
 def get_parameter_number(net):
@@ -18,7 +18,7 @@ def train():
     train_styles = [TRAIN_STYLE_DIR + style for style in os.listdir(TRAIN_STYLE_DIR)]
     print(f'Totally we have {len(train_contents)} contents and {len(train_styles)} styles')
 
-    loss_fn = nn.MSELoss(reduction='mean')
+    loss_fn = nn.MSELoss()
     encoder = VGGEncoder().to(device)
     decoder = VGGDecoder().to(device)
     optimizer = torch.optim.Adam(decoder.parameters(), lr=Chen.learning_rate)
@@ -78,15 +78,22 @@ def train():
         loss_list.append(total_loss.item())
 
         if (i + 1) % Chen.show_step == 0:
+            now_time = time.time()
             torch.save(decoder.state_dict(), 'model.pt')
+            print(f'save cost {time.time() - now_time}')
+            now_time = time.time()
             transfer(get_content_absolute_path('12.jpg'), get_style_absolute_path('8.jpg'),
                      get_output_absolute_path(f'12x8_Chen_{i + 1}_of_{Chen.training_steps}.jpg'), reload=True)
+            print(f'transfer cost {time.time() - now_time}')
+            now_time = time.time()
             plt.plot(range(len(loss_list)), loss_list)
-            plt.ylim((0, 10))
+            plt.ylim((0, 20))
             plt.xlabel('iteration')
             plt.ylabel('loss')
+
             plt.title('train loss')
             plt.savefig(f'train_loss.png')
+            print(f'draw loss cost {time.time() - now_time}')
             print(
                 f'now image loss is {image_reconstruction_loss.item()}, feature loss is {feature_reconstruction_loss.item()}, smooth loss is {normalize_loss.item()} and total loss is {total_loss.item()}')
 
