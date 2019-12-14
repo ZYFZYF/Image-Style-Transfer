@@ -5,6 +5,7 @@ from utils import *
 from config import Gatys
 from tqdm import tqdm
 import os
+import time
 
 
 class VggFeatureExtractor(nn.Module):
@@ -71,15 +72,20 @@ def transfer_all():
             for style in os.listdir(STYLE_DIR):
                 if not style.endswith('DS_Store'):
                     output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Gatys.png'
+                    now_time = time.time()
                     if os.path.exists(get_output_absolute_path(output)):
                         continue
-                    transfer(get_content_absolute_path(content), get_style_absolute_path(style),
-                             get_output_absolute_path(output))
-
+                    try:
+                        transfer(get_content_absolute_path(content), get_style_absolute_path(style),
+                                 get_output_absolute_path(output))
+                        print(f'generate content{content} and style{style} cost {time.time() - now_time} s')
+                    except Exception as e:
+                        print(f'generate content{content} and style{style} failed because of {e}')
+                        
 
 if __name__ == '__main__':
-    # transfer_all()
+    transfer_all()
     # transfer(get_content_absolute_path('2.png'), get_style_absolute_path('1.png'), get_output_absolute_path('2x1.png'))l
     # print(models.vgg19(pretrained=True).features)
-    transfer(get_content_absolute_path('12.jpg'), get_style_absolute_path('8.jpg'),
-             get_output_absolute_path('12x8_Gatys.png'))
+    # transfer(get_content_absolute_path('12.jpg'), get_style_absolute_path('8.jpg'),
+    #          get_output_absolute_path('12x8_Gatys.png'))
