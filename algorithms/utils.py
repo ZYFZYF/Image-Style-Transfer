@@ -111,15 +111,22 @@ def smooth_loss(img):
 
 def get_batched_mm(tensor):
     (batch, channel, h, w) = tensor.size()
-    w = tensor.reshape(batch, channel, -1)
-    w_t = torch.transpose(w, 1, 2)
+    w = tensor.view(batch, channel, w * h)
+    w_t = w.transpose(1, 2)
     # 不太理解这里为什么要除以大小，为了保持尺度一致么？
-    return torch.bmm(w, w_t)  # * 1.0 / (channel * w * h)
+    gram = w.bmm(w_t) / (channel * h * w)
+    return gram
 
 
 def get_model_name_from_style_path(style_path):
     style_name = os.path.splitext(os.path.split(style_path)[1])[0]
     return f'model_{style_name}.pt'
+
+
+def get_parameter_number(net):
+    total_num = sum(p.numel() for p in net.parameters())
+    trainable_num = sum(p.numel() for p in net.parameters() if p.requires_grad)
+    return {'Total': total_num, 'Trainable': trainable_num}
 
 
 if __name__ == '__main__':

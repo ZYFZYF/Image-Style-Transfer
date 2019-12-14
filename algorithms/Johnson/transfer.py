@@ -16,8 +16,8 @@ def transfer(content_path, style_path, output_path, reload=False):
         else:
             image_transformer.load_state_dict(torch.load(model))
         image_transformer.to(device)
-    content = get_image_tensor_from_path(content_path, scale=False)
-    style = get_image_tensor_from_path(style_path, scale=False)
+    content = get_image_tensor_from_path(content_path)
+    style = get_image_tensor_from_path(style_path)
     target = image_transformer(content)
     transfer_result_show(content, style, target, 'Transfer', save_file='_show'.join(os.path.splitext(output_path)))
     save_tensor_image(target, output_path)

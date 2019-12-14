@@ -17,7 +17,7 @@ class Chen:
 
 class Johnson:
     training_steps = 10000
-    show_step = 500
+    show_step = 50
     learning_rate = 0.001
     alpha = 1.0
     beta = 100.0
