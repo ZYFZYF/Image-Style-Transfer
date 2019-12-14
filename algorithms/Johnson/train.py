@@ -18,11 +18,21 @@ def train(style_path):
     loss_fn = nn.MSELoss()
     # 先把style的信息拿出来
     style = get_image_tensor_from_path(style_path)
+    print(style.shape)
+    style = style.repeat(Johnson.batch_size, 1, 1, 1)
+    print(style.shape)
     _, style_layers = vgg(style)
-    style_gram = []
-    for style_layer in style_layers:
-        style_layer = style_layer.reshape(style_layer.shape[1], -1)
-        style_gram.append(torch.mm(style_layer, style_layer.t()) / style_layer.shape[1])
+
+    # style_gram = []
+    # for style_layer in style_layers:
+    #     style_layer = style_layer.reshape(style_layer.shape[1], -1)
+    #     style_gram.append(torch.mm(style_layer, style_layer.t()) / style_layer.shape[1])
+
+    style_grams = [get_batched_mm(style_layer) for style_layer in style_layers]
+    # style_gram = []
+    # for style_layer in style_layers:
+    #     style_layer = style_layer.reshape(style_layer.shape[1], -1)
+    #     style_gram.append(torch.mm(style_layer, style_layer.t()))
 
     train_contents = [TRAIN_CONTENT_DIR + content for content in os.listdir(TRAIN_CONTENT_DIR)]
     loss_list = []
@@ -43,16 +53,27 @@ def train(style_path):
         target_content_layer, target_style_layers = vgg(target)
         content_layer, _ = vgg(content)
         content_loss = loss_fn(target_content_layer, content_layer)
-        style_loss_list = []
-        for j in range(len(target_style_layers)):
-            for k in range(Johnson.batch_size):
-                target_layer = target_style_layers[j][k].reshape(target_style_layers[j][k].shape[0], -1)
-                target_gram = torch.mm(target_layer, target_layer.t()) / target_layer.shape[1]
-                style_loss_list.append(loss_fn(target_gram, style_gram[j]))
+
+        # style_loss_list = []
+        # for j in range(len(target_style_layers)):
+        #     for k in range(Johnson.batch_size):
+        #         target_layer = target_style_layers[j][k].reshape(target_style_layers[j][k].shape[0], -1)
+        #         target_gram = torch.mm(target_layer, target_layer.t()) / target_layer.shape[1]
+        #         style_loss_list.append(loss_fn(target_gram, style_gram[j]))
+        # style_loss = 0
+        # for loss in style_loss_list:
+        #     style_loss += loss.item()
+        # style_loss /= len(target_style_layers) * Johnson.batch_size
+
         style_loss = 0
-        for loss in style_loss_list:
-            style_loss += loss.item()
-        style_loss /= len(target_style_layers) * Johnson.batch_size
+        # for j in range(len(target_style_layers)):
+        #     for k in range(Johnson.batch_size):
+        #         target_layer = target_style_layers[j][k].reshape(target_style_layers[j][k].shape[0], -1)
+        #         target_gram = torch.mm(target_layer, target_layer.t())
+        #         style_loss += loss_fn(target_gram, style_gram[j])
+        target_grams = [get_batched_mm(target_style_layer) for target_style_layer in target_style_layers]
+        for target_gram, style_gram in zip(target_grams, style_grams):
+            style_loss += loss_fn(target_gram, style_gram)
 
         normalize_loss = smooth_loss(target)
         total_loss = Johnson.alpha * content_loss + Johnson.beta * style_loss + Johnson.gamma * normalize_loss
