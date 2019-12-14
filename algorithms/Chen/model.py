@@ -22,28 +22,28 @@ class CIR(nn.Module):
         self.model = nn.Sequential(
             nn.Conv2d(in_channels=in_channels, out_channels=out_channels, kernel_size=kernel_size,
                       stride=stride, padding=padding_size),
-            nn.InstanceNorm2d(out_channels),
+            # nn.InstanceNorm2d(out_channels),
             nn.ReLU())
 
     def forward(self, x):
         return self.model(x)
 
 
-# class VGGDecoder(nn.Module):
-#     def __init__(self):
-#         super(VGGDecoder, self).__init__()
-#         self.model = nn.Sequential(
-#             CIR(in_channels=256, out_channels=128),
-#             nn.UpsamplingNearest2d(scale_factor=2),
-#             CIR(in_channels=128, out_channels=128),
-#             CIR(in_channels=128, out_channels=64),
-#             nn.UpsamplingNearest2d(scale_factor=2),
-#             CIR(in_channels=64, out_channels=64),
-#             nn.Conv2d(in_channels=64, out_channels=3, kernel_size=3, stride=1, padding=1)
-#         )
-#
-#     def forward(self, x):
-#         return self.model(x)
+class VGGDecoder(nn.Module):
+    def __init__(self):
+        super(VGGDecoder, self).__init__()
+        self.model = nn.Sequential(
+            CIR(in_channels=256, out_channels=128),
+            nn.UpsamplingNearest2d(scale_factor=2),
+            CIR(in_channels=128, out_channels=128),
+            CIR(in_channels=128, out_channels=64),
+            nn.UpsamplingNearest2d(scale_factor=2),
+            CIR(in_channels=64, out_channels=64),
+            nn.Conv2d(in_channels=64, out_channels=3, kernel_size=3, stride=1, padding=1)
+        )
+
+    def forward(self, x):
+        return self.model(x)
 
 
 def style_swap(content_feature, style_feature, patch_size):
@@ -69,42 +69,42 @@ def style_swap(content_feature, style_feature, patch_size):
     return deconv / overlap
 
 
-class RC(nn.Module):
-    """A wrapper of ReflectionPad2d and Conv2d"""
-
-    def __init__(self, in_channels, out_channels, kernel_size=3, pad_size=1, activated=True):
-        super().__init__()
-        self.pad = nn.ReflectionPad2d((pad_size, pad_size, pad_size, pad_size))
-        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size)
-        self.activated = activated
-
-    def forward(self, x):
-        h = self.pad(x)
-        h = self.conv(h)
-        if self.activated:
-            return F.relu(h)
-        else:
-            return h
-
-
-class VGGDecoder(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.rc1 = RC(256, 128, 3, 1)
-        self.rc2 = RC(128, 128, 3, 1)
-        self.rc3 = RC(128, 64, 3, 1)
-        self.rc4 = RC(64, 64, 3, 1)
-        self.rc5 = RC(64, 3, 3, 1, False)
-
-    def forward(self, features):
-        h = self.rc1(features)
-        h = F.interpolate(h, scale_factor=2)
-        h = self.rc2(h)
-        h = self.rc3(h)
-        h = F.interpolate(h, scale_factor=2)
-        h = self.rc4(h)
-        h = self.rc5(h)
-        return h
+# class RC(nn.Module):
+#     """A wrapper of ReflectionPad2d and Conv2d"""
+#
+#     def __init__(self, in_channels, out_channels, kernel_size=3, pad_size=1, activated=True):
+#         super().__init__()
+#         self.pad = nn.ReflectionPad2d((pad_size, pad_size, pad_size, pad_size))
+#         self.conv = nn.Conv2d(in_channels, out_channels, kernel_size)
+#         self.activated = activated
+#
+#     def forward(self, x):
+#         h = self.pad(x)
+#         h = self.conv(h)
+#         if self.activated:
+#             return F.relu(h)
+#         else:
+#             return h
+#
+#
+# class VGGDecoder(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#         self.rc1 = RC(256, 128, 3, 1)
+#         self.rc2 = RC(128, 128, 3, 1)
+#         self.rc3 = RC(128, 64, 3, 1)
+#         self.rc4 = RC(64, 64, 3, 1)
+#         self.rc5 = RC(64, 3, 3, 1, False)
+#
+#     def forward(self, features):
+#         h = self.rc1(features)
+#         h = F.interpolate(h, scale_factor=2)
+#         h = self.rc2(h)
+#         h = self.rc3(h)
+#         h = F.interpolate(h, scale_factor=2)
+#         h = self.rc4(h)
+#         h = self.rc5(h)
+#         return h
 
 
 if __name__ == '__main__':

@@ -82,5 +82,5 @@ if __name__ == '__main__':
     # transfer_all()
     # transfer(get_content_absolute_path('2.png'), get_style_absolute_path('1.png'), get_output_absolute_path('2x1.png'))l
     # print(models.vgg19(pretrained=True).features)
-    transfer(get_content_absolute_path('1.png'), get_style_absolute_path('1.png'),
-             get_output_absolute_path('1x1_with_tv.png'))
+    transfer(get_content_absolute_path('12.jpg'), get_style_absolute_path('8.jpg'),
+             get_output_absolute_path('12x8_Gatys.png'))

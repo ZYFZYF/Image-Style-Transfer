@@ -16,8 +16,8 @@ def transfer(content_path, style_path, output_path, reload=False):
         else:
             decoder.load_state_dict(torch.load('model.pt'))
         decoder.to(device)
-    content = get_image_tensor_from_path(content_path)
-    style = get_image_tensor_from_path(style_path)
+    content = get_image_tensor_from_path(content_path, scale=False)
+    style = get_image_tensor_from_path(style_path, scale=False)
     content_feature = encoder(content)
     style_feature = encoder(style)
     target_feature = style_swap(content_feature, style_feature, patch_size=3)
@@ -34,13 +34,16 @@ def transfer_all():
         if not content.endswith('DS_Store'):
             for style in os.listdir(STYLE_DIR):
                 if not style.endswith('DS_Store'):
-                    output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Chen.png'
+                    output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Chen_not_scale.png'
                     # if os.path.exists(get_output_absolute_path(output)):
                     #     continue
                     now_time = time.time()
-                    transfer(get_content_absolute_path(content), get_style_absolute_path(style),
-                             get_output_absolute_path(output))
-                    print(f'generate content{content} and style{style} cost {time.time() - now_time} s')
+                    try:
+                        transfer(get_content_absolute_path(content), get_style_absolute_path(style),
+                                 get_output_absolute_path(output))
+                        print(f'generate content{content} and style{style} cost {time.time() - now_time} s')
+                    except Exception as e:
+                        print(f'generate content{content} and style{style} failed because of {e}')
 
 
 if __name__ == '__main__':
