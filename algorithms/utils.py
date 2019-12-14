@@ -109,5 +109,18 @@ def smooth_loss(img):
     return (h_loss + w_loss) / (img.shape[1] * img.shape[2] * img.shape[3] * 2)
 
 
+def get_batched_mm(tensor):
+    (batch, channel, h, w) = tensor.size()
+    w = tensor.reshape(batch, channel, -1)
+    w_t = torch.transpose(w, 1, 2)
+    # 不太理解这里为什么要除以大小，为了保持尺度一致么？
+    return torch.bmm(w, w_t)  # * 1.0 / (channel * w * h)
+
+
+def get_model_name_from_style_path(style_path):
+    style_name = os.path.splitext(os.path.split(style_path)[1])[0]
+    return f'model_{style_name}.pt'
+
+
 if __name__ == '__main__':
     get_image_tensor_from_path('../image/content/1.png')

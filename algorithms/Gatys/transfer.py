@@ -44,8 +44,7 @@ def transfer(content_path, style_path, output_path):
             target_gram = torch.mm(target_layer, target_layer.t())
             style_gram = torch.mm(style_layer, style_layer.t())
             style_loss += torch.mean(torch.pow(target_gram - style_gram, 2)) / len(target_style_layers) / \
-                          target_layer.shape[
-                              0] / target_layer.shape[1]
+                          target_layer.shape[0] / target_layer.shape[1]
         normalize_loss = smooth_loss(target)
         total_loss = Gatys.alpha * content_loss + Gatys.beta * style_loss + Gatys.gamma * normalize_loss
         optimizer.zero_grad()

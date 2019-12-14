@@ -13,3 +13,13 @@ class Chen:
     learning_rate = 0.001
     gamma = 0.001
     batch_size = 1
+
+
+class Johnson:
+    training_steps = 10000
+    show_step = 500
+    learning_rate = 0.001
+    alpha = 1.0
+    beta = 100.0
+    gamma = 0.5
+    batch_size = 4
