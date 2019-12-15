@@ -109,8 +109,15 @@ def train(style_path):
             torch.save(image_transformer.state_dict(), get_model_name_from_style_path(style_path))
             print(f'save cost {time.time() - now_time}')
             now_time = time.time()
-            transfer(get_content_absolute_path('19.jpg'), get_style_absolute_path('4.png'),
-                     get_output_absolute_path(f'19x4_Johnson_{i + 1}_of_{Johnson.training_steps}.jpg'), reload=True)
+            image_transformer.eval()
+            content = get_image_tensor_from_path(get_content_absolute_path('19.jpg'))
+            target = image_transformer(content)
+            style = get_image_tensor_from_path(get_style_absolute_path('4.png'))
+            output_path = get_output_absolute_path(f'19x4_Johnson_{i + 1}_of_{Johnson.training_steps}.jpg')
+            transfer_result_show(content, style, target, 'Transfer',
+                                 save_file='_show'.join(os.path.splitext(output_path)))
+            save_tensor_image(target, output_path)
+            image_transformer.train()
             print(f'transfer cost {time.time() - now_time}')
 
             now_time = time.time()
