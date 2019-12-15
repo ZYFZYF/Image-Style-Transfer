@@ -110,12 +110,11 @@ def smooth_loss(img):
 
 
 def get_batched_mm(tensor):
-    (batch, channel, h, w) = tensor.size()
-    w = tensor.view(batch, channel, w * h)
+    (batch, channel, height, width) = tensor.size()
+    w = tensor.view(batch, channel, width * height)
     w_t = w.transpose(1, 2)
     # 不太理解这里为什么要除以大小，为了保持尺度一致么？
-    gram = w.bmm(w_t) / (channel * h * w)
-    return gram
+    return w.bmm(w_t) / (channel * height * width)
 
 
 def get_model_name_from_style_path(style_path):

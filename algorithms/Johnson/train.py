@@ -18,9 +18,7 @@ def train(style_path):
     loss_fn = nn.MSELoss()
     # 先把style的信息拿出来
     style = get_image_tensor_from_path(style_path)
-    print(style.shape)
     style = style.repeat(Johnson.batch_size, 1, 1, 1)
-    print(style.shape)
     _, style_layers = vgg(style)
 
     # style_gram = []
@@ -65,15 +63,18 @@ def train(style_path):
         #     style_loss += loss.item()
         # style_loss /= len(target_style_layers) * Johnson.batch_size
 
-        style_loss = 0
+        style_loss = 0.0
         # for j in range(len(target_style_layers)):
         #     for k in range(Johnson.batch_size):
         #         target_layer = target_style_layers[j][k].reshape(target_style_layers[j][k].shape[0], -1)
         #         target_gram = torch.mm(target_layer, target_layer.t())
         #         style_loss += loss_fn(target_gram, style_gram[j])
         target_grams = [get_batched_mm(target_style_layer) for target_style_layer in target_style_layers]
+        temp_style_loss_list = []
         for target_gram, style_gram in zip(target_grams, style_grams):
-            style_loss += loss_fn(target_gram, style_gram)
+            temp_style_loss_list.append(loss_fn(target_gram, style_gram))
+        for style_loss_item in temp_style_loss_list:
+            style_loss += style_loss_item.item()
 
         normalize_loss = smooth_loss(target)
         total_loss = Johnson.alpha * content_loss + Johnson.beta * style_loss + Johnson.gamma * normalize_loss

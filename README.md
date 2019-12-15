@@ -8,6 +8,7 @@
         - 修改loss（增加光滑项）×
         - 用Chen中的style swap操作来计算loss ×
      - [Johnson](https://arxiv.org/abs/1603.08155)方法复现 ×
+        - 训了6个小时还是和白训了一样？怎么办？
      - [Shen](https://arxiv.org/abs/1709.04111)方法复现 ×
      - [Chen](https://arxiv.org/abs/1612.04337)方法复现 部分完成
         - 训练过程中出现的奇妙现象：generate出来的图片底色随着训练轮数的变化大幅度改变？（好像是学习率设大了？）
