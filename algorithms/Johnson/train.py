@@ -13,7 +13,7 @@ from torchvision import models
 class VggFeatureExtractor(nn.Module):
     def __init__(self):
         super(VggFeatureExtractor, self).__init__()
-        self.content_layer = '15'  # relu3_3
+        self.content_layer = '8'  # relu2_2
         self.style_layers = ['3', '8', '15', '22']  # relu1_2, relu2_2, relu3_3, and relu4_3
         self.vgg_model = models.vgg16(pretrained=True).features
         # print(self.vgg_model)
@@ -30,7 +30,7 @@ class VggFeatureExtractor(nn.Module):
         return content, style
 
 
-def train(style_path):
+def train(style_path, verbose=True):
     # 模型载入
     vgg = VggFeatureExtractor().to(device).eval()
     image_transformer = ImageTransformNet().to(device)
@@ -91,52 +91,66 @@ def train(style_path):
         #         target_gram = torch.mm(target_layer, target_layer.t())
         #         style_loss += loss_fn(target_gram, style_gram[j])
         target_grams = [get_batched_mm(target_style_layer) for target_style_layer in target_style_layers]
-        temp_style_loss_list = []
-        for target_gram, style_gram in zip(target_grams, style_grams):
-            temp_style_loss_list.append(loss_fn(target_gram, style_gram))
-        for style_loss_item in temp_style_loss_list:
-            style_loss += style_loss_item.item()
+        # temp_style_loss_list = []
+        # for target_gram, style_gram in zip(target_grams, style_grams):
+        #     temp_style_loss_list.append(loss_fn(target_gram, style_gram))
+        # for style_loss_item in temp_style_loss_list:
+        #     style_loss += style_loss_item.item()
+        for j in range(4):
+            style_loss += loss_fn(target_grams[j], style_grams[j])
 
         normalize_loss = smooth_loss(target)
         total_loss = Johnson.alpha * content_loss + Johnson.beta * style_loss + Johnson.gamma * normalize_loss
         optimizer.zero_grad()
-        total_loss.backward()
+        total_loss.backward(retain_graph=True)
         optimizer.step()
 
         loss_list.append(total_loss.item())
         if (i + 1) % Johnson.show_step == 0:
-            now_time = time.time()
+            # now_time = time.time()
             torch.save(image_transformer.state_dict(), get_model_name_from_style_path(style_path))
-            print(f'save cost {time.time() - now_time}')
-            now_time = time.time()
-            image_transformer.eval()
-            content = get_image_tensor_from_path(get_content_absolute_path('19.jpg'))
-            target = image_transformer(content)
-            style = get_image_tensor_from_path(get_style_absolute_path('4.png'))
-            output_path = get_output_absolute_path(f'19x4_Johnson_{i + 1}_of_{Johnson.training_steps}.jpg')
-            transfer_result_show(content, style, target, 'Transfer',
-                                 save_file='_show'.join(os.path.splitext(output_path)))
-            save_tensor_image(target, output_path)
-            image_transformer.train()
-            print(f'transfer cost {time.time() - now_time}')
+            print(
+                ' now {}/{} content loss is {}, style loss is {}, smooth loss is {} and total loss is {}'.format(i + 1,
+                                                                                                                 Johnson.training_steps,
+                                                                                                                 content_loss,
+                                                                                                                 style_loss,
+                                                                                                                 normalize_loss,
+                                                                                                                 total_loss.item()))
+            # print(f'save cost {time.time() - now_time}')
+            # if verbose:
+            #     now_time = time.time()
+            #     image_transformer.eval()
+            #     content = get_image_tensor_from_path(get_content_absolute_path('19.jpg'))
+            #     target = image_transformer(content)
+            #     style = get_image_tensor_from_path(get_style_absolute_path('4.png'))
+            #     output_path = get_output_absolute_path(f'19x4_Johnson_{i + 1}_of_{Johnson.training_steps}.jpg')
+            #     transfer_result_show(content, style, target, 'Transfer',
+            #                          save_file='_show'.join(os.path.splitext(output_path)))
+            #     save_tensor_image(target, output_path)
+            #     image_transformer.train()
+            #     print(f'transfer cost {time.time() - now_time}')
+            #
+            #     now_time = time.time()
+            #     plt.plot(range(len(loss_list)), loss_list)
+            #     plt.xlabel('iteration')
+            #     plt.ylabel('loss')
+            #
+            #     plt.title('train loss')
+            #     plt.savefig(f'train_loss.png')
+            #     print(f'draw loss cost {time.time() - now_time}')
 
-            now_time = time.time()
-            plt.plot(range(len(loss_list)), loss_list)
-            plt.xlabel('iteration')
-            plt.ylabel('loss')
-
-            plt.title('train loss')
-            plt.savefig(f'train_loss.png')
-            print(f'draw loss cost {time.time() - now_time}')
-        print(
-            'now {}/{} content loss is {}, style loss is {}, smooth loss is {} and total loss is {}'.format(i + 1,
-                                                                                                            Johnson.training_steps,
-                                                                                                            content_loss,
-                                                                                                            style_loss,
-                                                                                                            normalize_loss,
-                                                                                                            total_loss.item()))
         # transfer_result_show(content, style, target, 'Target {}/{}'.format(i + 1, Gatys.training_steps))
 
 
+def train_all():
+    for style in os.listdir(STYLE_DIR):
+        if not style.endswith('.DS_Store'):
+            style_path = get_style_absolute_path(style)
+            style_model = get_model_name_from_style_path(style_path)
+            if not os.path.exists(style_model):
+                train(style_path, verbose=False)
+
+
 if __name__ == '__main__':
-    train(get_style_absolute_path('4.png'))
+    # train(get_style_absolute_path('4.png'))
+    train_all()

@@ -119,7 +119,7 @@ def get_batched_mm(tensor):
 
 def get_model_name_from_style_path(style_path):
     style_name = os.path.splitext(os.path.split(style_path)[1])[0]
-    return f'model_{style_name}.pt'
+    return f'model/model_{style_name}.pt'
 
 
 def get_parameter_number(net):

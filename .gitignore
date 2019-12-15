@@ -131,3 +131,4 @@ dmypy.json
 .DS_Store
 image/output/
 dataset/
+algorithms/Johnson/model/
