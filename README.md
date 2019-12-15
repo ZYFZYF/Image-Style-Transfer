@@ -9,7 +9,9 @@
         - 用Chen中的style swap操作来计算loss ×
      - [Johnson](https://arxiv.org/abs/1603.08155)方法复现 ×
         - 训了6个小时还是和白训了一样？怎么办？
+        - 破案了，算loss的时候千万不能.item()，这样就从tensor变成scalar了，更不要谈backward()了，浪费我这么久。。。。。。
      - [Shen](https://arxiv.org/abs/1709.04111)方法复现 ×
+        - 目前打算放弃这个，直接开发实施转换的应用了
      - [Chen](https://arxiv.org/abs/1612.04337)方法复现 部分完成
         - 训练过程中出现的奇妙现象：generate出来的图片底色随着训练轮数的变化大幅度改变？（好像是学习率设大了？）
         - 为什么训练到后面transfer以及画loss的速度越来越慢？甚至到了两分钟以上
