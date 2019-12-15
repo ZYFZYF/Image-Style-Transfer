@@ -3,19 +3,9 @@ from utils import *
 import time
 
 image_transformer = ImageTransformNet()
-is_first = True
 
 
-def transfer(content_path, style_path, output_path, reload=False):
-    global is_first, decoder
-    model = get_model_name_from_style_path(style_path)
-    if is_first or reload:
-        is_first = False
-        if not torch.cuda.is_available():
-            image_transformer.load_state_dict(torch.load(model, map_location=lambda storage, loc: storage))
-        else:
-            image_transformer.load_state_dict(torch.load(model))
-        image_transformer.to(device)
+def transfer(content_path, style_path, output_path):
     content = get_image_tensor_from_path(content_path)
     style = get_image_tensor_from_path(style_path)
     target = image_transformer(content)
@@ -29,18 +19,25 @@ def transfer_all():
 
     for style in os.listdir(STYLE_DIR):
         if not style.endswith('DS_Store'):
-            for content in os.listdir(CONTENT_DIR):
-                if not content.endswith('DS_Store'):
-                    output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Johnson.png'
-                    # if os.path.exists(get_output_absolute_path(output)):
-                    #     continue
-                    now_time = time.time()
-                    try:
-                        transfer(get_content_absolute_path(content), get_style_absolute_path(style),
-                                 get_output_absolute_path(output), reload=True)
-                        print(f'generate content{content} and style{style} cost {time.time() - now_time} s')
-                    except Exception as e:
-                        print(f'generate content{content} and style{style} failed because of {e}')
+            model = get_model_name_from_style_path(style)
+            if os.path.exists(model):
+                if not torch.cuda.is_available():
+                    image_transformer.load_state_dict(torch.load(model, map_location=lambda storage, loc: storage))
+                else:
+                    image_transformer.load_state_dict(torch.load(model))
+                image_transformer.to(device)
+                for content in os.listdir(CONTENT_DIR):
+                    if not content.endswith('DS_Store'):
+                        output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Johnson.png'
+                        # if os.path.exists(get_output_absolute_path(output)):
+                        #     continue
+                        now_time = time.time()
+                        try:
+                            transfer(get_content_absolute_path(content), get_style_absolute_path(style),
+                                     get_output_absolute_path(output))
+                            print(f'generate content{content} and style{style} cost {time.time() - now_time} s')
+                        except Exception as e:
+                            print(f'generate content{content} and style{style} failed because of {e}')
 
 
 if __name__ == '__main__':

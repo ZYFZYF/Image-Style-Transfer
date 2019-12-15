@@ -105,39 +105,40 @@ def train(style_path, verbose=True):
         total_loss.backward(retain_graph=True)
         optimizer.step()
 
+        print(
+            ' now {}/{} content loss is {}, style loss is {}, smooth loss is {} and total loss is {}'.format(i + 1,
+                                                                                                             Johnson.training_steps,
+                                                                                                             content_loss,
+                                                                                                             style_loss,
+                                                                                                             normalize_loss,
+                                                                                                             total_loss.item()))
         loss_list.append(total_loss.item())
         if (i + 1) % Johnson.show_step == 0:
-            # now_time = time.time()
+            now_time = time.time()
             torch.save(image_transformer.state_dict(), get_model_name_from_style_path(style_path))
-            print(
-                ' now {}/{} content loss is {}, style loss is {}, smooth loss is {} and total loss is {}'.format(i + 1,
-                                                                                                                 Johnson.training_steps,
-                                                                                                                 content_loss,
-                                                                                                                 style_loss,
-                                                                                                                 normalize_loss,
-                                                                                                                 total_loss.item()))
-            # print(f'save cost {time.time() - now_time}')
-            # if verbose:
-            #     now_time = time.time()
-            #     image_transformer.eval()
-            #     content = get_image_tensor_from_path(get_content_absolute_path('19.jpg'))
-            #     target = image_transformer(content)
-            #     style = get_image_tensor_from_path(get_style_absolute_path('4.png'))
-            #     output_path = get_output_absolute_path(f'19x4_Johnson_{i + 1}_of_{Johnson.training_steps}.jpg')
-            #     transfer_result_show(content, style, target, 'Transfer',
-            #                          save_file='_show'.join(os.path.splitext(output_path)))
-            #     save_tensor_image(target, output_path)
-            #     image_transformer.train()
-            #     print(f'transfer cost {time.time() - now_time}')
-            #
-            #     now_time = time.time()
-            #     plt.plot(range(len(loss_list)), loss_list)
-            #     plt.xlabel('iteration')
-            #     plt.ylabel('loss')
-            #
-            #     plt.title('train loss')
-            #     plt.savefig(f'train_loss.png')
-            #     print(f'draw loss cost {time.time() - now_time}')
+
+            print(f'save cost {time.time() - now_time}')
+            if verbose:
+                now_time = time.time()
+                image_transformer.eval()
+                content = get_image_tensor_from_path(get_content_absolute_path('19.jpg'))
+                target = image_transformer(content)
+                style = get_image_tensor_from_path(style_path)
+                output_path = get_output_absolute_path(f'19x4_Johnson_{i + 1}_of_{Johnson.training_steps}.jpg')
+                transfer_result_show(content, style, target, 'Transfer',
+                                     save_file='_show'.join(os.path.splitext(output_path)))
+                save_tensor_image(target, output_path)
+                image_transformer.train()
+                print(f'transfer cost {time.time() - now_time}')
+
+                now_time = time.time()
+                plt.plot(range(len(loss_list)), loss_list)
+                plt.xlabel('iteration')
+                plt.ylabel('loss')
+
+                plt.title('train loss')
+                plt.savefig(f'train_loss.png')
+                print(f'draw loss cost {time.time() - now_time}')
 
         # transfer_result_show(content, style, target, 'Target {}/{}'.format(i + 1, Gatys.training_steps))
 
@@ -153,4 +154,5 @@ def train_all():
 
 if __name__ == '__main__':
     # train(get_style_absolute_path('4.png'))
-    train_all()
+    # train_all()
+    train(get_style_absolute_path('1.png'), verbose=True)

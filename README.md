@@ -10,6 +10,7 @@
      - [Johnson](https://arxiv.org/abs/1603.08155)方法复现 ×
         - 训了6个小时还是和白训了一样？怎么办？
         - 破案了，算loss的时候千万不能.item()，这样就从tensor变成scalar了，更不要谈backward()了，浪费我这么久。。。。。。
+        - 每个style需要的参数是不一样的，需要每张分别作
      - [Shen](https://arxiv.org/abs/1709.04111)方法复现 ×
         - 目前打算放弃这个，直接开发实施转换的应用了
      - [Chen](https://arxiv.org/abs/1612.04337)方法复现 部分完成

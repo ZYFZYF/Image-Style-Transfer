@@ -20,6 +20,6 @@ class Johnson:
     show_step = 200
     learning_rate = 0.0001
     alpha = 1.0
-    beta = 10000.0
+    beta = 100000.0
     gamma = 0.5
     batch_size = 4
