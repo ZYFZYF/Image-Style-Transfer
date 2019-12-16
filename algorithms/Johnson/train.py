@@ -121,10 +121,12 @@ def train(style_path, verbose=True):
             if verbose:
                 now_time = time.time()
                 image_transformer.eval()
-                content = get_image_tensor_from_path(get_content_absolute_path('19.jpg'))
+                content = get_image_tensor_from_path(get_content_absolute_path('1.png'))
                 target = image_transformer(content)
                 style = get_image_tensor_from_path(style_path)
-                output_path = get_output_absolute_path(f'19x4_Johnson_{i + 1}_of_{Johnson.training_steps}.jpg')
+                style_index = os.path.splitext(os.path.split(style_path)[1])[0]
+                output_path = get_output_absolute_path(
+                    f'1x{style_index}_Johnson_{i + 1}_of_{Johnson.training_steps}.jpg')
                 transfer_result_show(content, style, target, 'Transfer',
                                      save_file='_show'.join(os.path.splitext(output_path)))
                 save_tensor_image(target, output_path)
@@ -154,5 +156,7 @@ def train_all():
 
 if __name__ == '__main__':
     # train(get_style_absolute_path('4.png'))
-    # train_all()
-    train(get_style_absolute_path('1.png'), verbose=True)
+    train_all()
+    # train_styles = ['11.jpg', '13.png', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg']
+    # train(get_style_absolute_path('9'
+    #                               '.jpg'), verbose=True)
