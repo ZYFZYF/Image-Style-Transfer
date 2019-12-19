@@ -5,7 +5,7 @@
  - 论文复现
      - [Gatys](https://arxiv.org/abs/1508.06576)方法复现 部分完成
         - 基本效果 √
-        - 修改loss（增加光滑项）×
+        - 修改loss（增加光滑项）√
         - 用Chen中的style swap操作来计算loss ×
      - [Johnson](https://arxiv.org/abs/1603.08155)方法复现 ×
         - 训了6个小时还是和白训了一样？怎么办？
