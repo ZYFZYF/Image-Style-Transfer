@@ -29,8 +29,8 @@ def transfer_all():
                 for content in os.listdir(CONTENT_DIR):
                     if not content.endswith('DS_Store'):
                         output = os.path.splitext(content)[0] + 'x' + os.path.splitext(style)[0] + '_Johnson.png'
-                        # if os.path.exists(get_output_absolute_path(output)):
-                        #     continue
+                        if os.path.exists(get_output_absolute_path(output)):
+                            continue
                         now_time = time.time()
                         try:
                             transfer(get_content_absolute_path(content), get_style_absolute_path(style),

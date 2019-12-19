@@ -151,12 +151,14 @@ def train_all():
             style_path = get_style_absolute_path(style)
             style_model = get_model_name_from_style_path(style_path)
             if not os.path.exists(style_model):
-                train(style_path, verbose=False)
+                train(style_path
+                      )
 
 
 if __name__ == '__main__':
     # train(get_style_absolute_path('4.png'))
     train_all()
     # train_styles = ['11.jpg', '13.png', '14.jpg', '15.jpg', '16.jpg', '17.jpg', '18.jpg', '19.jpg']
+
     # train(get_style_absolute_path('9'
     #                               '.jpg'), verbose=True)
