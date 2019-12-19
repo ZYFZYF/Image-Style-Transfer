@@ -13,9 +13,9 @@ class VideoTransferWindow(QMainWindow):
         self.ui.select_style.clicked.connect(self.select_style)
 
     def select_style(self):
-        self.style_path, return_code = QFileDialog.getOpenFileName(self, '选择图片', '../image/style/',
-                                                                   'Image files(*.jpg *.jpeg *.png)')
+        path, return_code = QFileDialog.getOpenFileName(self, '选择图片', '../image/style/',
+                                                        'Image files(*.jpg *.jpeg *.png)')
         if return_code:
+            self.style_path = path
             self.ui.select_style.setText(os.path.split(self.style_path)[1])
-            image = get_scaled_pixmap(self.style_path)
-            self.ui.style_image.setPixmap(image)
+            self.ui.style_image.setPixmap(self.style_path)

@@ -8,6 +8,7 @@ from utils import *
 import time
 import Gatys.transfer
 import Chen.transfer
+import Johnson.transfer
 
 
 class ImageTransferWindow(QMainWindow):
@@ -24,16 +25,18 @@ class ImageTransferWindow(QMainWindow):
         self.ui.transfer.clicked.connect(self.select_algorithm.show)
 
     def select_content(self):
-        self.content_path, return_code = QFileDialog.getOpenFileName(self, '选择图片', '../image/content/',
-                                                                     'Image files(*.jpg *.jpeg *.png)')
+        path, return_code = QFileDialog.getOpenFileName(self, '选择图片', '../image/content/',
+                                                        'Image files(*.jpg *.jpeg *.png)')
         if return_code:
+            self.content_path = path
             self.ui.select_content.setText(os.path.split(self.content_path)[1])
             self.ui.content_image.setPixmap(get_scaled_pixmap(self.content_path))
 
     def select_style(self):
-        self.style_path, return_code = QFileDialog.getOpenFileName(self, '选择图片', '../image/style/',
-                                                                   'Image files(*.jpg *.jpeg *.png)')
+        path, return_code = QFileDialog.getOpenFileName(self, '选择图片', '../image/style/',
+                                                        'Image files(*.jpg *.jpeg *.png)')
         if return_code:
+            self.style_path = path
             self.ui.select_style.setText(os.path.split(self.style_path)[1])
             self.ui.style_image.setPixmap(get_scaled_pixmap(self.style_path))
 
@@ -45,5 +48,6 @@ class ImageTransferWindow(QMainWindow):
         if algorithm == 'Chen':
             Chen.transfer.transfer(self.content_path, self.style_path, output_path)
         if algorithm == 'Johnson':
-            pass
+            Johnson.transfer.reload_model(get_model_name_from_style_path(self.style_path))
+            Johnson.transfer.transfer(self.content_path, self.style_path, output_path)
         self.ui.transfer_image.setPixmap(get_scaled_pixmap(output_path))

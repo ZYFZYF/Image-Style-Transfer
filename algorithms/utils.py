@@ -122,7 +122,7 @@ def get_batched_mm(tensor):
 
 def get_model_name_from_style_path(style_path):
     style_name = os.path.splitext(os.path.split(style_path)[1])[0]
-    return f'model/model_{style_name}.pt'
+    return f'{os.path.split(__file__)[0]}/Johnson/model/model_{style_name}.pt'
 
 
 def get_parameter_number(net):
@@ -132,4 +132,6 @@ def get_parameter_number(net):
 
 
 if __name__ == '__main__':
-    get_image_tensor_from_path('../image/content/1.png')
+    print(get_model_name_from_style_path(STYLE_DIR + '2.jpg'))
+    print(get_model_name_from_style_path('2.jpg'))
+    # get_image_tensor_from_path('../image/content/1.png')
