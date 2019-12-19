@@ -23,7 +23,9 @@
      - 从文件选择图片并显示 完成
         - 用了QImage和PIL的Image，前者拿不到用后者加载并强转，目前没有发现反例
         - [PIL Image to QPixmap conversion issue](https://stackoverflow.com/questions/34697559/pil-image-to-qpixmap-conversion-issue)
-
+     - 显示摄像头内容 ×
+     - 图片风格转换 ×
+     - 视频风格转换 ×
 ## Dataset
 
  - Content 
