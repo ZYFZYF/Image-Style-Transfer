@@ -60,7 +60,7 @@ def transfer(content_path, style_path, output_path):
                                                                                                                  normalize_loss,
                                                                                                                  total_loss.item()))
             # transfer_result_show(content, style, target, 'Target {}/{}'.format(i + 1, Gatys.training_steps))
-    transfer_result_show(content, style, target, 'Transfer', save_file='_show'.join(os.path.splitext(output_path)))
+    # transfer_result_show(content, style, target, 'Transfer', save_file='_show'.join(os.path.splitext(output_path)))
     save_tensor_image(target, output_path)
 
 
@@ -81,7 +81,7 @@ def transfer_all():
                         print(f'generate content{content} and style{style} cost {time.time() - now_time} s')
                     except Exception as e:
                         print(f'generate content{content} and style{style} failed because of {e}')
-                        
+
 
 if __name__ == '__main__':
     transfer_all()

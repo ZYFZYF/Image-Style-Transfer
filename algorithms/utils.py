@@ -8,6 +8,9 @@ CONTENT_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/content/'
 STYLE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/style/'
 OUTPUT_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/output/'
 
+if not os.path.exists(OUTPUT_DIR):
+    os.mkdir(OUTPUT_DIR)
+
 TRAIN_CONTENT_DIR = os.path.dirname(os.path.dirname(__file__)) + '/dataset/content/'
 TRAIN_STYLE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/dataset/style/'
 
