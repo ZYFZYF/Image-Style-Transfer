@@ -1,5 +1,5 @@
 from image_transfer import Ui_ImageTransfer
-from PyQt5.QtWidgets import QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox
 from selectAlgorithmWindow import SelectAlgorithmWindow
 from PyQt5.QtGui import QPixmap
 from common import *
@@ -41,6 +41,11 @@ class ImageTransferWindow(QMainWindow):
             self.ui.style_image.setPixmap(get_scaled_pixmap(self.style_path))
 
     def transfer(self, algorithm):
+        if not self.content_path or not self.style_path:
+            box = QMessageBox(QMessageBox.Warning, '', '请先选择内容和风格')
+            box.addButton(self.tr("确定"), QMessageBox.YesRole)
+            box.exec()
+            return
         output_path = OUTPUT_DIR + str(int(time.time())) + '.jpg'
         self.ui.transfer.setText(algorithm)
         if algorithm == 'Gatys':

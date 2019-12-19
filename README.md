@@ -24,7 +24,9 @@
         - 用了QImage和PIL的Image，前者拿不到用后者加载并强转，目前没有发现反例
         - [PIL Image to QPixmap conversion issue](https://stackoverflow.com/questions/34697559/pil-image-to-qpixmap-conversion-issue)
      - 显示摄像头内容 ×
-     - 图片风格转换 ×
+     - 图片风格转换 
+        - 算法层面 完成
+        - 显示进度 ×
      - 视频风格转换 ×
 ## Dataset
 
