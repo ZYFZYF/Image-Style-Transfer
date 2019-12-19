@@ -20,6 +20,9 @@
  - 工作集成
      - 同步进行中
  - 实时风格转换demo ×
+     - 从文件选择图片并显示 完成
+        - 用了QImage和PIL的Image，前者拿不到用后者加载并强转，目前没有发现反例
+        - [PIL Image to QPixmap conversion issue](https://stackoverflow.com/questions/34697559/pil-image-to-qpixmap-conversion-issue)
 
 ## Dataset
 
