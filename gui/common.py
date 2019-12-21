@@ -28,4 +28,5 @@ def get_scaled_pixmap(path):
 
 
 def generate_temp_image_path():
-    return OUTPUT_DIR + str(int(time.time() * 1000)) + '.jpg'
+    return 'frame.jpg'
+    # return (TEMP_DIR + str(int(time.time() * 1000)) + '.jpg').replace('\\', '/')

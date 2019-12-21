@@ -1,6 +1,6 @@
 import cv2
 
-# from common import generate_temp_image_path
+from common import generate_temp_image_path
 
 cap = None
 
@@ -11,12 +11,14 @@ def start_capture(source):
         cap = cv2.VideoCapture(0)
     else:
         cap = cv2.VideoCapture(source)
+    print(cap.isOpened())
 
 
 def get_next_frame():
     ret, frame = cap.read()
-    path = 'test.jpg'  # generate_temp_image_path()
+    path = generate_temp_image_path()
     cv2.imwrite(path, frame)
+    print('write finished')
     return path
 
 

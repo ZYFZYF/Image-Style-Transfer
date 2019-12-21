@@ -7,6 +7,7 @@ import os
 CONTENT_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/content/'
 STYLE_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/style/'
 OUTPUT_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/output/'
+TEMP_DIR = os.path.dirname(os.path.dirname(__file__)) + '/image/temp/'
 
 if not os.path.exists(OUTPUT_DIR):
     os.mkdir(OUTPUT_DIR)
@@ -122,7 +123,7 @@ def get_batched_mm(tensor):
 
 def get_model_name_from_style_path(style_path):
     style_name = os.path.splitext(os.path.split(style_path)[1])[0]
-    return f'{os.path.split(__file__)[0]}/Johnson/model/model_{style_name}.pt'
+    return f'{os.path.split(__file__)[0]}/Johnson/model/model_{style_name}.pt'.replace('\\', '/')
 
 
 def get_parameter_number(net):

@@ -51,6 +51,7 @@ class VideoTransferWindow(QMainWindow):
             box.exec()
             return
         print('start to transfer')
+        Johnson.transfer.reload_model(get_model_name_from_style_path(self.style_path))
         start_capture(self.content_path)
         self.timer.start()
 
@@ -61,9 +62,9 @@ class VideoTransferWindow(QMainWindow):
         start_time = time.time()
         # 从源里拿到一帧
         content_path = get_next_frame()
+        self.ui.content_video.setPixmap(get_scaled_pixmap(content_path))
         output_path = generate_temp_image_path()
         # 风格迁移后输出到指定位置
-        Johnson.transfer.reload_model(get_model_name_from_style_path(self.style_path))
         Johnson.transfer.transfer(content_path, self.style_path, output_path)
         # 然后显示到屏幕上
         self.ui.transfer_video.setPixmap(get_scaled_pixmap(output_path))
@@ -85,9 +86,10 @@ class Timer(QThread):
         while True:
             if self.stopped:
                 return
+            print("prepare to emit signal")
             self.time_to_render.emit()
             # 40毫秒发送一次信号
-            time.sleep(0.04)
+            time.sleep(0.5)
 
     def stop(self):
         with QMutexLocker(self.mutex):
