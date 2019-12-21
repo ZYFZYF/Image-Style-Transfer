@@ -132,3 +132,5 @@ dmypy.json
 image/output/
 dataset/
 algorithms/Johnson/model/
+image/content/*.mp4
+image/content/*.avi

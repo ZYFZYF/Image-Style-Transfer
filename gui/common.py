@@ -1,6 +1,8 @@
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.Qt import QRect
 from PIL import Image, ImageQt
+from utils import *
+import time
 import numpy as np
 
 
@@ -21,3 +23,7 @@ def get_scaled_pixmap(path):
         rect = QRect(int(width / 2 - height / 2), 0, height, height)
     image = image.copy(rect)
     return QPixmap(image.scaled(256, 256))
+
+
+def generate_temp_image_path():
+    return OUTPUT_DIR + str(int(time.time() * 1000)) + '.jpg'

@@ -1,3 +1,3 @@
 {
-    "files": ["start.ui","video_transfer.ui","main.py","image_transfer.ui","select_algorithm.ui"]
+    "files": ["video_transfer.ui","main.py","start.ui","select_algorithm.ui","image_transfer.ui","select_video.ui"]
 }

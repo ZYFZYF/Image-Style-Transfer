@@ -13,7 +13,6 @@ class SelectAlgorithmWindow(QMainWindow):
         self.ui.cancel.clicked.connect(self.close)
         self.ui.start.clicked.connect(self.start)
         self.select_algorithm.connect(image_transfer_window.transfer)
-        self.parent = image_transfer_window
 
     def start(self):
         self.close()

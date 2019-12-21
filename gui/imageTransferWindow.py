@@ -46,7 +46,7 @@ class ImageTransferWindow(QMainWindow):
             box.addButton(self.tr("确定"), QMessageBox.YesRole)
             box.exec()
             return
-        output_path = OUTPUT_DIR + str(int(time.time())) + '.jpg'
+        output_path = generate_temp_image_path()
         self.ui.transfer.setText(algorithm)
         if algorithm == 'Gatys':
             Gatys.transfer.transfer(self.content_path, self.style_path, output_path)
