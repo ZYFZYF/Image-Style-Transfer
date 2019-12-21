@@ -1,12 +1,15 @@
 from video_transfer import Ui_VideoTransfer
 from PyQt5.QtWidgets import QMainWindow, QFileDialog
 from selectVideoWindow import SelectVideoWindow
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import QThread, QMutex, QMutexLocker
 from PyQt5.Qt import pyqtSignal
 import time
 import os
-from common import get_scaled_pixmap
+from common import *
+
+
+# from cv2 import VideoCapture
 
 
 class VideoTransferWindow(QMainWindow):
@@ -19,6 +22,11 @@ class VideoTransferWindow(QMainWindow):
         self.ui.select_video.clicked.connect(self.select_video_window.show)
         self.ui.transfer.clicked.connect(self.transfer_start)
         self.timer = Timer(self)
+        self.ui.content_video.setStyleSheet(image_border_style)
+        self.ui.style_image.setStyleSheet(image_border_style)
+        self.ui.transfer_video.setStyleSheet(image_border_style)
+
+        # self.device = VideoCapture(0)
 
     def select_style(self):
         path, return_code = QFileDialog.getOpenFileName(self, '选择图片', '../image/style/',
@@ -39,7 +47,19 @@ class VideoTransferWindow(QMainWindow):
 
     def transfer_one_frame(self):
         start_time = time.time()
-        print('need to transfer one frame')
+        ret, frame = self.device.read()
+
+        # 读写磁盘方式
+        # cv2.imwrite("2.png", frame)
+        # self.image.load("2.png")
+
+        height, width, bytesPerComponent = frame.shape
+        bytesPerLine = bytesPerComponent * width
+        # 变换彩色空间顺序
+        # cv2.cvtColor(frame, cv2.COLOR_BGR2RGB, frame)
+        # 转为QImage对象
+        self.image = QImage(frame.data, width, height, bytesPerLine, QImage.Format_RGB888)
+        self.view.setPixmap(QPixmap.fromImage(self.image))
         print(f'迁移一帧耗费{int((time.time() - start_time) * 1000)}毫秒')
 
 

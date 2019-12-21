@@ -12,7 +12,7 @@ class SelectAlgorithmWindow(QMainWindow):
         self.ui.setupUi(self)
         self.ui.cancel.clicked.connect(self.close)
         self.ui.start.clicked.connect(self.start)
-        self.select_algorithm.connect(image_transfer_window.transfer)
+        self.select_algorithm.connect(image_transfer_window.select_algorithm)
 
     def start(self):
         self.close()

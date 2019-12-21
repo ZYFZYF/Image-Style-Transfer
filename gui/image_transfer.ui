@@ -7,91 +7,16 @@
     <x>0</x>
     <y>0</y>
     <width>901</width>
-    <height>457</height>
+    <height>453</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>图像风格迁移</string>
   </property>
-  <widget class="QWidget" name="horizontalLayoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>40</x>
-     <y>70</y>
-     <width>826</width>
-     <height>311</height>
-    </rect>
-   </property>
-   <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0">
-    <property name="spacing">
-     <number>-1</number>
-    </property>
-    <property name="sizeConstraint">
-     <enum>QLayout::SetDefaultConstraint</enum>
-    </property>
-    <item>
-     <widget class="QLabel" name="content_image">
-      <property name="minimumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="style_image">
-      <property name="minimumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="transfer_image">
-      <property name="minimumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
   <widget class="QPushButton" name="cancel">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>310</x>
      <y>390</y>
      <width>112</width>
      <height>32</height>
@@ -110,9 +35,9 @@
   <widget class="QPushButton" name="select_content">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>110</x>
      <y>30</y>
-     <width>100</width>
+     <width>131</width>
      <height>32</height>
     </rect>
    </property>
@@ -135,9 +60,9 @@
   <widget class="QPushButton" name="select_style">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>380</x>
      <y>30</y>
-     <width>100</width>
+     <width>131</width>
      <height>32</height>
     </rect>
    </property>
@@ -157,12 +82,12 @@
     <string>选择图片风格</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="transfer">
+  <widget class="QPushButton" name="select_algorithm">
    <property name="geometry">
     <rect>
-     <x>670</x>
+     <x>650</x>
      <y>30</y>
-     <width>100</width>
+     <width>131</width>
      <height>32</height>
     </rect>
    </property>
@@ -179,16 +104,107 @@
     </size>
    </property>
    <property name="text">
-    <string>风格迁移</string>
+    <string>选择算法</string>
    </property>
    <property name="autoDefault">
+    <bool>true</bool>
+   </property>
+   <property name="default">
     <bool>false</bool>
+   </property>
+   <property name="flat">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="start">
+   <property name="geometry">
+    <rect>
+     <x>480</x>
+     <y>390</y>
+     <width>112</width>
+     <height>32</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>迁移</string>
    </property>
    <property name="default">
     <bool>true</bool>
    </property>
-   <property name="flat">
-    <bool>false</bool>
+  </widget>
+  <widget class="QLabel" name="content_image">
+   <property name="geometry">
+    <rect>
+     <x>50</x>
+     <y>90</y>
+     <width>256</width>
+     <height>256</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="style_image">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>90</y>
+     <width>256</width>
+     <height>256</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="transfer_image">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>90</y>
+     <width>256</width>
+     <height>256</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>868</width>
-    <height>460</height>
+    <width>906</width>
+    <height>444</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,8 +16,8 @@
   <widget class="QPushButton" name="cancel">
    <property name="geometry">
     <rect>
-     <x>370</x>
-     <y>400</y>
+     <x>390</x>
+     <y>380</y>
      <width>112</width>
      <height>32</height>
     </rect>
@@ -35,9 +35,9 @@
   <widget class="QPushButton" name="select_video">
    <property name="geometry">
     <rect>
-     <x>90</x>
+     <x>110</x>
      <y>30</y>
-     <width>160</width>
+     <width>131</width>
      <height>32</height>
     </rect>
    </property>
@@ -48,9 +48,9 @@
   <widget class="QPushButton" name="select_style">
    <property name="geometry">
     <rect>
-     <x>350</x>
+     <x>380</x>
      <y>30</y>
-     <width>159</width>
+     <width>131</width>
      <height>32</height>
     </rect>
    </property>
@@ -61,9 +61,9 @@
   <widget class="QPushButton" name="transfer">
    <property name="geometry">
     <rect>
-     <x>620</x>
+     <x>650</x>
      <y>30</y>
-     <width>160</width>
+     <width>131</width>
      <height>32</height>
     </rect>
    </property>
@@ -77,74 +77,80 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QWidget" name="horizontalLayoutWidget">
+  <widget class="QLabel" name="transfer_video">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>50</x>
      <y>90</y>
-     <width>786</width>
-     <height>271</height>
+     <width>256</width>
+     <height>256</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <item>
-     <widget class="QLabel" name="transfer_video">
-      <property name="minimumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="style_image">
-      <property name="minimumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="content_video">
-      <property name="minimumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>256</width>
-        <height>256</height>
-       </size>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-   </layout>
+   <property name="minimumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="content_video">
+   <property name="geometry">
+    <rect>
+     <x>590</x>
+     <y>90</y>
+     <width>256</width>
+     <height>256</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="style_image">
+   <property name="geometry">
+    <rect>
+     <x>320</x>
+     <y>90</y>
+     <width>256</width>
+     <height>256</height>
+    </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>256</width>
+     <height>256</height>
+    </size>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
   </widget>
  </widget>
  <resources/>

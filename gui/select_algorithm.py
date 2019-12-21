@@ -13,7 +13,7 @@ class Ui_SelectAlgorithm(object):
         SelectAlgorithm.setObjectName("SelectAlgorithm")
         SelectAlgorithm.resize(400, 216)
         self.verticalLayoutWidget = QtWidgets.QWidget(SelectAlgorithm)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(60, 40, 271, 80))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(60, 40, 278, 80))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -52,5 +52,5 @@ class Ui_SelectAlgorithm(object):
         self.Chen.setText(_translate("SelectAlgorithm", "Chen(较快，~1s）"))
         self.Johnson.setText(_translate("SelectAlgorithm", "Johnson(最快，~100ms，但style有限制）"))
         self.cancel.setText(_translate("SelectAlgorithm", "返回"))
-        self.start.setText(_translate("SelectAlgorithm", "开始生成"))
+        self.start.setText(_translate("SelectAlgorithm", "确定"))
 

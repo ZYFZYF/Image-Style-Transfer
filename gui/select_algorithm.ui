@@ -18,7 +18,7 @@
     <rect>
      <x>60</x>
      <y>40</y>
-     <width>271</width>
+     <width>278</width>
      <height>80</height>
     </rect>
    </property>
@@ -69,7 +69,7 @@
     <item>
      <widget class="QPushButton" name="start">
       <property name="text">
-       <string>开始生成</string>
+       <string>确定</string>
       </property>
       <property name="default">
        <bool>true</bool>

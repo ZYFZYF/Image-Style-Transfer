@@ -5,6 +5,8 @@ from utils import *
 import time
 import numpy as np
 
+image_border_style = 'border-width: 2px;border-style: solid;border-color: rgb(0, 0, 0);'
+
 
 def get_scaled_pixmap(path):
     image = QImage(path)
