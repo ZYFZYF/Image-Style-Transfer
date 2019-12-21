@@ -36,14 +36,14 @@
     <item>
      <widget class="QRadioButton" name="Chen">
       <property name="text">
-       <string>Chen(较快，~1s）</string>
+       <string>Chen(较快，~150ms）</string>
       </property>
      </widget>
     </item>
     <item>
      <widget class="QRadioButton" name="Johnson">
       <property name="text">
-       <string>Johnson(最快，~100ms，但style有限制）</string>
+       <string>Johnson(最快，~90ms，但style有限制）</string>
       </property>
      </widget>
     </item>

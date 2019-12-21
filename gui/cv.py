@@ -1,5 +1,6 @@
 import cv2
-from common import generate_temp_image_path
+
+# from common import generate_temp_image_path
 
 cap = None
 
@@ -14,7 +15,7 @@ def start_capture(source):
 
 def get_next_frame():
     ret, frame = cap.read()
-    path = generate_temp_image_path()
+    path = 'test.jpg'  # generate_temp_image_path()
     cv2.imwrite(path, frame)
     return path
 

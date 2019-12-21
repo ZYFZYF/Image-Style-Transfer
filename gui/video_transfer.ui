@@ -77,7 +77,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="transfer_video">
+  <widget class="QLabel" name="content_video">
    <property name="geometry">
     <rect>
      <x>50</x>
@@ -102,7 +102,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="content_video">
+  <widget class="QLabel" name="transfer_video">
    <property name="geometry">
     <rect>
      <x>590</x>

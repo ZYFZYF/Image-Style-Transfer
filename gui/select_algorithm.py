@@ -49,8 +49,8 @@ class Ui_SelectAlgorithm(object):
         _translate = QtCore.QCoreApplication.translate
         SelectAlgorithm.setWindowTitle(_translate("SelectAlgorithm", "选择使用的算法"))
         self.Gatys.setText(_translate("SelectAlgorithm", "Gatys(最慢，~4min)"))
-        self.Chen.setText(_translate("SelectAlgorithm", "Chen(较快，~1s）"))
-        self.Johnson.setText(_translate("SelectAlgorithm", "Johnson(最快，~100ms，但style有限制）"))
+        self.Chen.setText(_translate("SelectAlgorithm", "Chen(较快，~150ms）"))
+        self.Johnson.setText(_translate("SelectAlgorithm", "Johnson(最快，~90ms，但style有限制）"))
         self.cancel.setText(_translate("SelectAlgorithm", "返回"))
         self.start.setText(_translate("SelectAlgorithm", "确定"))
 
