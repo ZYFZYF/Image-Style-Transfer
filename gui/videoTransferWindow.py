@@ -27,6 +27,7 @@ class VideoTransferWindow(QMainWindow):
         self.ui.content_video.setStyleSheet(image_border_style)
         self.ui.style_image.setStyleSheet(image_border_style)
         self.ui.transfer_video.setStyleSheet(image_border_style)
+        self.ui.stop.clicked.connect(self.transfer_stop)
 
         # self.device = VideoCapture(0)
 
@@ -53,6 +54,9 @@ class VideoTransferWindow(QMainWindow):
         start_capture(self.content_path)
         self.timer.start()
 
+    def transfer_stop(self):
+        self.timer.stop()
+
     def transfer_one_frame(self):
         start_time = time.time()
         # 从源里拿到一帧
@@ -71,15 +75,15 @@ class Timer(QThread):
 
     def __init__(self, parent):
         super(Timer, self).__init__(parent)
-        self.stop = False
+        self.stopped = False
         self.mutex = QMutex()
         self.time_to_render.connect(parent.transfer_one_frame)
 
     def run(self):
         with QMutexLocker(self.mutex):
-            self.stop = False
+            self.stopped = False
         while True:
-            if self.stop:
+            if self.stopped:
                 return
             self.time_to_render.emit()
             # 40毫秒发送一次信号
@@ -87,8 +91,8 @@ class Timer(QThread):
 
     def stop(self):
         with QMutexLocker(self.mutex):
-            self.stop = True
+            self.stopped = True
 
-    def isStoped(self):
+    def isStopped(self):
         with QMutexLocker(self.mutex):
-            return self.stop
+            return self.stopped

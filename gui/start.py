@@ -11,17 +11,17 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_StartWindow(object):
     def setupUi(self, StartWindow):
         StartWindow.setObjectName("StartWindow")
-        StartWindow.resize(400, 184)
+        StartWindow.resize(438, 214)
         self.select_image = QtWidgets.QPushButton(StartWindow)
-        self.select_image.setGeometry(QtCore.QRect(40, 110, 101, 31))
+        self.select_image.setGeometry(QtCore.QRect(60, 130, 101, 31))
         self.select_image.setDefault(True)
         self.select_image.setObjectName("select_image")
         self.select_video = QtWidgets.QPushButton(StartWindow)
-        self.select_video.setGeometry(QtCore.QRect(240, 110, 112, 32))
+        self.select_video.setGeometry(QtCore.QRect(260, 130, 112, 32))
         self.select_video.setDefault(True)
         self.select_video.setObjectName("select_video")
         self.label = QtWidgets.QLabel(StartWindow)
-        self.label.setGeometry(QtCore.QRect(100, 50, 191, 20))
+        self.label.setGeometry(QtCore.QRect(110, 50, 211, 41))
         self.label.setObjectName("label")
 
         self.retranslateUi(StartWindow)

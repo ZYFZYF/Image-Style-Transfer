@@ -13,7 +13,7 @@ class Ui_VideoTransfer(object):
         VideoTransfer.setObjectName("VideoTransfer")
         VideoTransfer.resize(906, 444)
         self.cancel = QtWidgets.QPushButton(VideoTransfer)
-        self.cancel.setGeometry(QtCore.QRect(390, 380, 112, 32))
+        self.cancel.setGeometry(QtCore.QRect(310, 380, 112, 32))
         self.cancel.setAutoDefault(False)
         self.cancel.setDefault(True)
         self.cancel.setObjectName("cancel")
@@ -46,6 +46,11 @@ class Ui_VideoTransfer(object):
         self.style_image.setMaximumSize(QtCore.QSize(256, 256))
         self.style_image.setText("")
         self.style_image.setObjectName("style_image")
+        self.stop = QtWidgets.QPushButton(VideoTransfer)
+        self.stop.setGeometry(QtCore.QRect(470, 380, 112, 32))
+        self.stop.setAutoDefault(False)
+        self.stop.setDefault(True)
+        self.stop.setObjectName("stop")
 
         self.retranslateUi(VideoTransfer)
         QtCore.QMetaObject.connectSlotsByName(VideoTransfer)
@@ -57,4 +62,5 @@ class Ui_VideoTransfer(object):
         self.select_video.setText(_translate("VideoTransfer", "选择视频"))
         self.select_style.setText(_translate("VideoTransfer", "选择风格"))
         self.transfer.setText(_translate("VideoTransfer", "风格迁移"))
+        self.stop.setText(_translate("VideoTransfer", "终止"))
 
