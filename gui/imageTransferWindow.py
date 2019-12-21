@@ -55,7 +55,7 @@ class ImageTransferWindow(QMainWindow):
             box.exec()
             return
         start_time = time.time()
-        output_path = generate_temp_image_path()
+        output_path = generate_temp_write_image_path()
         if self.algorithm == 'Gatys':
             Gatys.transfer.transfer(self.content_path, self.style_path, output_path)
         if self.algorithm == 'Chen':

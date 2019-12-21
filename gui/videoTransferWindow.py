@@ -63,7 +63,7 @@ class VideoTransferWindow(QMainWindow):
         # 从源里拿到一帧
         content_path = get_next_frame()
         self.ui.content_video.setPixmap(get_scaled_pixmap(content_path))
-        output_path = generate_temp_image_path()
+        output_path = generate_temp_write_image_path()
         # 风格迁移后输出到指定位置
         Johnson.transfer.transfer(content_path, self.style_path, output_path)
         # 然后显示到屏幕上

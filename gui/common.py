@@ -27,6 +27,10 @@ def get_scaled_pixmap(path):
     return QPixmap(image.scaled(256, 256))
 
 
-def generate_temp_image_path():
-    return 'frame.jpg'
-    # return (TEMP_DIR + str(int(time.time() * 1000)) + '.jpg').replace('\\', '/')
+def generate_temp_read_image_path():
+    return 'read/' + str(int(time.time() * 1000)) + '.jpg'
+
+
+def generate_temp_write_image_path():
+    return 'write/' + str(int(time.time() * 1000)) + '.jpg'
+# return (TEMP_DIR + str(int(time.time() * 1000)) + '.jpg').replace('\\', '/')
