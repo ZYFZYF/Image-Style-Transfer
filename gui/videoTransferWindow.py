@@ -1,5 +1,5 @@
 from video_transfer import Ui_VideoTransfer
-from PyQt5.QtWidgets import QMainWindow, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox
 from selectVideoWindow import SelectVideoWindow
 from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import QThread, QMutex, QMutexLocker
@@ -7,6 +7,8 @@ from PyQt5.Qt import pyqtSignal
 import time
 import os
 from common import *
+from cv import get_next_frame, start_capture
+import Johnson.transfer
 
 
 # from cv2 import VideoCapture
@@ -42,24 +44,25 @@ class VideoTransferWindow(QMainWindow):
         print(content)
 
     def transfer_start(self):
+        if not self.content_path or not self.style_path:
+            box = QMessageBox(QMessageBox.Warning, '', '请先选择内容和风格')
+            box.addButton(self.tr("确定"), QMessageBox.YesRole)
+            box.exec()
+            return
         print('start to transfer')
+        start_capture(self.content_path)
         self.timer.start()
 
     def transfer_one_frame(self):
         start_time = time.time()
-        ret, frame = self.device.read()
-
-        # 读写磁盘方式
-        # cv2.imwrite("2.png", frame)
-        # self.image.load("2.png")
-
-        height, width, bytesPerComponent = frame.shape
-        bytesPerLine = bytesPerComponent * width
-        # 变换彩色空间顺序
-        # cv2.cvtColor(frame, cv2.COLOR_BGR2RGB, frame)
-        # 转为QImage对象
-        self.image = QImage(frame.data, width, height, bytesPerLine, QImage.Format_RGB888)
-        self.view.setPixmap(QPixmap.fromImage(self.image))
+        # 从源里拿到一帧
+        content_path = get_next_frame()
+        output_path = generate_temp_image_path()
+        # 风格迁移后输出到指定位置
+        Johnson.transfer.reload_model(get_model_name_from_style_path(self.style_path))
+        Johnson.transfer.transfer(content_path, self.style_path, output_path)
+        # 然后显示到屏幕上
+        self.ui.transfer_video.setPixmap(get_scaled_pixmap(output_path))
         print(f'迁移一帧耗费{int((time.time() - start_time) * 1000)}毫秒')
 
 
