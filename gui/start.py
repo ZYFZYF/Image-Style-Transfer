@@ -21,7 +21,7 @@ class Ui_StartWindow(object):
         self.select_video.setDefault(True)
         self.select_video.setObjectName("select_video")
         self.label = QtWidgets.QLabel(StartWindow)
-        self.label.setGeometry(QtCore.QRect(110, 50, 211, 41))
+        self.label.setGeometry(QtCore.QRect(120, 50, 211, 41))
         self.label.setObjectName("label")
 
         self.retranslateUi(StartWindow)

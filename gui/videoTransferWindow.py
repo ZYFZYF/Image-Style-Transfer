@@ -46,6 +46,8 @@ class VideoTransferWindow(QMainWindow):
         print(content)
 
     def transfer_start(self):
+        if not self.timer.isStopped():
+            return
         self.transfer_frames = 0
         self.transfer_start_time = time.time()
 
@@ -88,7 +90,7 @@ class Timer(QThread):
 
     def __init__(self, parent):
         super(Timer, self).__init__(parent)
-        self.stopped = False
+        self.stopped = True
         self.mutex = QMutex()
         # self.time_to_render.connect(parent.transfer_one_frame)
         self.parent = parent
@@ -106,6 +108,7 @@ class Timer(QThread):
         start_time = time.time()
         for i in tqdm(range(int(self.parent.total_transfer_frames))):
             if self.stopped:
+                self.parent.ui.transfer.setText(f'开始迁移')
                 return
             # 从源里拿到一帧
             content_path = get_next_frame()
@@ -117,7 +120,7 @@ class Timer(QThread):
             self.parent.ui.transfer_video.setPixmap(get_scaled_pixmap(output_path))
             self.parent.ui.transfer.setText(f'{i}/{int(self.parent.total_transfer_frames)}')
             # print(f'迁移一帧耗费{int((time.time() - start_time) * 1000)}毫秒')
-            print(f'已迁移{i + 1}帧，耗费{time.time() - start_time}')
+            print(f'已迁移{i + 1}帧，耗费{time.time() - start_time},平均每帧耗时{(time.time() - start_time) / (i + 1)}')
         self.parent.ui.transfer.setText(f'已完成')
 
     def stop(self):
