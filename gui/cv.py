@@ -1,9 +1,14 @@
 import cv2
 
 from common import generate_temp_read_image_path
+from PIL import Image
+import time
+import numpy as np
 
 cap = None
 input = None
+width = None
+height = None
 
 
 def start_capture(source):
@@ -13,6 +18,7 @@ def start_capture(source):
         cap = cv2.VideoCapture(0)
     else:
         cap = cv2.VideoCapture(source)
+    global width, height
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     print(width, height)
@@ -21,11 +27,14 @@ def start_capture(source):
 
 def get_next_frame():
     ret, frame = cap.read()
-    path = generate_temp_read_image_path()
+    print(type(frame))
     if input == '摄像头':
         frame = frame[60:420, 140:500]
-    cv2.imwrite(path, frame)
-    return path
+    else:
+        pass
+    frame = frame[..., ::-1]
+    image = Image.fromarray(frame)
+    return image
 
 
 if __name__ == '__main__':

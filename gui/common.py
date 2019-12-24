@@ -12,14 +12,20 @@ if not os.path.exists('write/'):
     os.mkdir('write/')
 
 
+# 这里的path也可能是打开的PIL Image
 def get_scaled_pixmap(path):
-    image = QImage(path)
-    if not image.width():
-        # 如果QImage打不开用PIL打开强转
-        image = Image.open(path)
-        image = image.convert("RGB")
+    if type(path) != str:
+        image = path.convert("RGB")
         data = image.tobytes("raw", "RGB")
         image = QImage(data, image.size[0], image.size[1], QImage.Format_RGB888)
+    else:
+        image = QImage(path)
+        if not image.width():
+            # 如果QImage打不开用PIL打开强转
+            image = Image.open(path)
+            image = image.convert("RGB")
+            data = image.tobytes("raw", "RGB")
+            image = QImage(data, image.size[0], image.size[1], QImage.Format_RGB888)
     width = image.width()
     height = image.height()
     # 窄的图片取上方，宽的图片取中间，保持和神经网络一样的剪切方式
