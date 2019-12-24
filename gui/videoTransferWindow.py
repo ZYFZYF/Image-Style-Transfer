@@ -58,7 +58,9 @@ class VideoTransferWindow(QMainWindow):
             return
         print('start to transfer')
         Johnson.transfer.reload_model(get_model_name_from_style_path(self.style_path))
-        self.total_transfer_frames = start_capture(self.content_path)
+        self.total_transfer_frames = int(start_capture(self.content_path))
+        if self.total_transfer_frames == 0:
+            self.total_transfer_frames = '∞'
         self.timer.start()
 
     def transfer_stop(self):
@@ -77,7 +79,7 @@ class VideoTransferWindow(QMainWindow):
         # 然后显示到屏幕上
         self.ui.transfer_video.setPixmap(get_scaled_pixmap(output_path))
         self.transfer_frames += 1
-        self.ui.transfer.setText(f'{self.transfer_frames}/{int(self.total_transfer_frames)}')
+        self.ui.transfer.setText(f'{self.transfer_frames}/{self.total_transfer_frames}')
         # print(f'迁移一帧耗费{int((time.time() - start_time) * 1000)}毫秒')
         print(f'已迁移{self.transfer_frames}帧，耗费{time.time() - self.transfer_start_time}')
 
@@ -106,7 +108,7 @@ class Timer(QThread):
         #     # 40毫秒发送一次信号
         #     time.sleep(0.5)
         start_time = time.time()
-        for i in tqdm(range(int(self.parent.total_transfer_frames))):
+        for i in tqdm(range(self.parent.total_transfer_frames if self.parent.total_transfer_frames != '∞' else 100000)):
             if self.stopped:
                 self.parent.ui.transfer.setText(f'开始迁移')
                 return
@@ -118,7 +120,7 @@ class Timer(QThread):
             Johnson.transfer.transfer(content_path, self.parent.style_path, output_path)
             # 然后显示到屏幕上
             self.parent.ui.transfer_video.setPixmap(get_scaled_pixmap(output_path))
-            self.parent.ui.transfer.setText(f'{i}/{int(self.parent.total_transfer_frames)}')
+            self.parent.ui.transfer.setText(f'{i}/{self.parent.total_transfer_frames}')
             # print(f'迁移一帧耗费{int((time.time() - start_time) * 1000)}毫秒')
             print(f'已迁移{i + 1}帧，耗费{time.time() - start_time},平均每帧耗时{(time.time() - start_time) / (i + 1)}')
         self.parent.ui.transfer.setText(f'已完成')
