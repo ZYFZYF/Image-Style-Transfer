@@ -45,6 +45,9 @@ class VideoTransferWindow(QMainWindow):
         print(content)
 
     def transfer_start(self):
+        self.transfer_frames = 0
+        self.transfer_start_time = time.time()
+
         if not self.content_path or not self.style_path:
             box = QMessageBox(QMessageBox.Warning, '', '请先选择内容和风格')
             box.addButton(self.tr("确定"), QMessageBox.YesRole)
@@ -52,10 +55,11 @@ class VideoTransferWindow(QMainWindow):
             return
         print('start to transfer')
         Johnson.transfer.reload_model(get_model_name_from_style_path(self.style_path))
-        start_capture(self.content_path)
+        self.total_transfer_frames = start_capture(self.content_path)
         self.timer.start()
 
     def transfer_stop(self):
+        self.transfer_frames = 0
         self.timer.stop()
 
     def transfer_one_frame(self):
@@ -68,7 +72,10 @@ class VideoTransferWindow(QMainWindow):
         Johnson.transfer.transfer(content_path, self.style_path, output_path)
         # 然后显示到屏幕上
         self.ui.transfer_video.setPixmap(get_scaled_pixmap(output_path))
-        print(f'迁移一帧耗费{int((time.time() - start_time) * 1000)}毫秒')
+        self.transfer_frames += 1
+        self.ui.transfer.setText(f'{self.transfer_frames}/{int(self.total_transfer_frames)}')
+        # print(f'迁移一帧耗费{int((time.time() - start_time) * 1000)}毫秒')
+        print(f'已迁移{self.transfer_frames}帧，耗费{time.time() - self.transfer_start_time}')
 
     def closeEvent(self, event):
         self.timer.stop()

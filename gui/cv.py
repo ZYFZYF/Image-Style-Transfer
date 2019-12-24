@@ -16,6 +16,7 @@ def start_capture(source):
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     print(width, height)
+    return cap.get(7)
 
 
 def get_next_frame():
