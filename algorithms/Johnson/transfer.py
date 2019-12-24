@@ -6,12 +6,13 @@ image_transformer = ImageTransformNet()
 now_model = None
 
 
-def transfer(content_path, style_path, output_path):
+def transfer(content_path, style_path, output_path=None):
     content = get_image_tensor_from_path(content_path)
-    # style = get_image_tensor_from_path(style_path)
     target = image_transformer(content)
-    # transfer_result_show(content, style, target, 'Transfer', save_file='_show'.join(os.path.splitext(output_path)))
-    save_tensor_image(target, output_path)
+    if not output_path:
+        return get_image_from_tensor(target)
+    else:
+        save_tensor_image(target, output_path)
 
 
 def reload_model(model_path):

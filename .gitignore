@@ -136,3 +136,5 @@ image/content/*.mp4
 image/content/*.avi
 gui/read/*
 gui/write/*
+gui/image/*
+gui/video/*
