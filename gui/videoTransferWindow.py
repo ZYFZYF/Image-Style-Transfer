@@ -94,11 +94,10 @@ class Transfer(QThread):
             # 从源里拿到一帧
             content_image = get_next_frame()
             self.parent.ui.content_video.setPixmap(get_scaled_pixmap(content_image))
-            output_path = generate_temp_write_image_path()
             # 风格迁移后输出到指定位置
-            Johnson.transfer.transfer(content_image, self.parent.style_path, output_path)
+            target_image = Johnson.transfer.transfer(content_image, self.parent.style_path)
             # 然后显示到屏幕上
-            self.parent.ui.transfer_video.setPixmap(get_scaled_pixmap(output_path))
+            self.parent.ui.transfer_video.setPixmap(get_scaled_pixmap(target_image))
             self.parent.ui.transfer.setText(f'{i}/{self.parent.total_transfer_frames}')
             print(f'已迁移{i + 1}帧，耗费{time.time() - start_time}秒,平均每帧耗时{(time.time() - start_time) / (i + 1)}秒')
         self.parent.ui.transfer.setText(f'已完成')

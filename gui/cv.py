@@ -27,7 +27,6 @@ def start_capture(source):
 
 def get_next_frame():
     ret, frame = cap.read()
-    print(type(frame))
     if input == '摄像头':
         frame = frame[60:420, 140:500]
     else:
