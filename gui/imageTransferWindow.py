@@ -65,7 +65,3 @@ class ImageTransferWindow(QMainWindow):
             Johnson.transfer.transfer(self.content_path, self.style_path, output_path)
         self.ui.transfer_image.setPixmap(get_scaled_pixmap(output_path))
         print(f'{self.algorithm}迁移耗时{int((time.time() - start_time) * 1000)}毫秒')
-
-    def closeEvent(self, event):
-        self.timer.stop()
-        event.accept()

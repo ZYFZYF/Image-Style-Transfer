@@ -70,6 +70,10 @@ class VideoTransferWindow(QMainWindow):
         self.ui.transfer_video.setPixmap(get_scaled_pixmap(output_path))
         print(f'迁移一帧耗费{int((time.time() - start_time) * 1000)}毫秒')
 
+    def closeEvent(self, event):
+        self.timer.stop()
+        event.accept()
+
 
 class Timer(QThread):
     time_to_render = pyqtSignal()

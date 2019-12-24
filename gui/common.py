@@ -6,6 +6,10 @@ import time
 import numpy as np
 
 image_border_style = 'border-width: 2px;border-style: solid;border-color: rgb(0, 0, 0);'
+if not os.path.exists('read/'):
+    os.mkdir('read/')
+if not os.path.exists('write/'):
+    os.mkdir('write/')
 
 
 def get_scaled_pixmap(path):
