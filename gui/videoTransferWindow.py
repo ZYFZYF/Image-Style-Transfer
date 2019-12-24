@@ -9,6 +9,7 @@ import os
 from common import *
 from cv import get_next_frame, start_capture
 import Johnson.transfer
+from tqdm import tqdm
 
 
 # from cv2 import VideoCapture
@@ -60,6 +61,7 @@ class VideoTransferWindow(QMainWindow):
 
     def transfer_stop(self):
         self.transfer_frames = 0
+        self.ui.transfer.setText(f'开始迁移')
         self.timer.stop()
 
     def transfer_one_frame(self):
@@ -78,29 +80,45 @@ class VideoTransferWindow(QMainWindow):
         print(f'已迁移{self.transfer_frames}帧，耗费{time.time() - self.transfer_start_time}')
 
     def closeEvent(self, event):
-        self.timer.stop()
+        self.transfer_stop()
         event.accept()
 
 
 class Timer(QThread):
-    time_to_render = pyqtSignal()
 
     def __init__(self, parent):
         super(Timer, self).__init__(parent)
         self.stopped = False
         self.mutex = QMutex()
-        self.time_to_render.connect(parent.transfer_one_frame)
+        # self.time_to_render.connect(parent.transfer_one_frame)
+        self.parent = parent
 
     def run(self):
         with QMutexLocker(self.mutex):
             self.stopped = False
-        while True:
+        # while True:
+        #     if self.stopped:
+        #         return
+        #     print("prepare to emit signal")
+        #     self.time_to_render.emit()
+        #     # 40毫秒发送一次信号
+        #     time.sleep(0.5)
+        start_time = time.time()
+        for i in tqdm(range(int(self.parent.total_transfer_frames))):
             if self.stopped:
                 return
-            print("prepare to emit signal")
-            self.time_to_render.emit()
-            # 40毫秒发送一次信号
-            time.sleep(0.5)
+            # 从源里拿到一帧
+            content_path = get_next_frame()
+            self.parent.ui.content_video.setPixmap(get_scaled_pixmap(content_path))
+            output_path = generate_temp_write_image_path()
+            # 风格迁移后输出到指定位置
+            Johnson.transfer.transfer(content_path, self.parent.style_path, output_path)
+            # 然后显示到屏幕上
+            self.parent.ui.transfer_video.setPixmap(get_scaled_pixmap(output_path))
+            self.parent.ui.transfer.setText(f'{i}/{int(self.parent.total_transfer_frames)}')
+            # print(f'迁移一帧耗费{int((time.time() - start_time) * 1000)}毫秒')
+            print(f'已迁移{i + 1}帧，耗费{time.time() - start_time}')
+        self.parent.ui.transfer.setText(f'已完成')
 
     def stop(self):
         with QMutexLocker(self.mutex):

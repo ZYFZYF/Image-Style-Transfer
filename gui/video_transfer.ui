@@ -68,7 +68,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>风格迁移</string>
+    <string>开始迁移</string>
    </property>
    <property name="autoDefault">
     <bool>false</bool>

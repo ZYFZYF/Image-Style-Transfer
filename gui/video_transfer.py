@@ -61,6 +61,6 @@ class Ui_VideoTransfer(object):
         self.cancel.setText(_translate("VideoTransfer", "返回"))
         self.select_video.setText(_translate("VideoTransfer", "选择视频"))
         self.select_style.setText(_translate("VideoTransfer", "选择风格"))
-        self.transfer.setText(_translate("VideoTransfer", "风格迁移"))
+        self.transfer.setText(_translate("VideoTransfer", "开始迁移"))
         self.stop.setText(_translate("VideoTransfer", "终止"))
 
