@@ -1,6 +1,5 @@
 import cv2
 
-from common import generate_temp_read_image_path
 from PIL import Image
 import time
 import numpy as np

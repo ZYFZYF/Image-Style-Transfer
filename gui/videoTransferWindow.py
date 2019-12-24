@@ -1,11 +1,8 @@
 from video_transfer import Ui_VideoTransfer
 from PyQt5.QtWidgets import QMainWindow, QFileDialog, QMessageBox
 from selectVideoWindow import SelectVideoWindow
-from PyQt5.QtGui import QPixmap, QImage
 from PyQt5.QtCore import QThread, QMutex, QMutexLocker
-from PyQt5.Qt import pyqtSignal
-import time
-import os
+import cv2
 from common import *
 from cv import get_next_frame, start_capture
 import Johnson.transfer
@@ -58,11 +55,7 @@ class VideoTransferWindow(QMainWindow):
             box.addButton(self.tr("确定"), QMessageBox.YesRole)
             box.exec()
             return
-        print('start to transfer')
         Johnson.transfer.reload_model(get_model_name_from_style_path(self.style_path))
-        self.total_transfer_frames = int(start_capture(self.content_path))
-        if self.total_transfer_frames == 0:
-            self.total_transfer_frames = '∞'
         self.transfer.start()
 
     def transfer_stop(self):
@@ -86,10 +79,21 @@ class Transfer(QThread):
     def run(self):
         with QMutexLocker(self.mutex):
             self.stopped = False
+        print('prepare to transfer')
+        # 先开启设备/打开视频
+        total_transfer_frames = int(start_capture(self.parent.content_path))
+        if total_transfer_frames == 0:
+            total_transfer_frames = '∞'
+        # 设置输出结果的格式
+        four_cc = cv2.VideoWriter_fourcc(*'mp4v')
+        fps = 24
+        video_writer = cv2.VideoWriter(generate_temp_video_path(), four_cc, fps, (256, 256))
         start_time = time.time()
-        for i in tqdm(range(self.parent.total_transfer_frames if self.parent.total_transfer_frames != '∞' else 100000)):
+        print('start to transfer')
+        for i in tqdm(range(total_transfer_frames if total_transfer_frames != '∞' else 100000)):
             if self.stopped:
                 self.parent.ui.transfer.setText(f'开始迁移')
+                video_writer.release()
                 return
             # 从源里拿到一帧
             content_image = get_next_frame()
@@ -98,9 +102,13 @@ class Transfer(QThread):
             target_image = Johnson.transfer.transfer(content_image, self.parent.style_path)
             # 然后显示到屏幕上
             self.parent.ui.transfer_video.setPixmap(get_scaled_pixmap(target_image))
-            self.parent.ui.transfer.setText(f'{i}/{self.parent.total_transfer_frames}')
+            self.parent.ui.transfer.setText(f'{i}/{total_transfer_frames}')
+            frame = np.array(target_image)
+            frame = frame[..., ::-1]
+            video_writer.write(frame)
             print(f'已迁移{i + 1}帧，耗费{time.time() - start_time}秒,平均每帧耗时{(time.time() - start_time) / (i + 1)}秒')
         self.parent.ui.transfer.setText(f'已完成')
+        video_writer.release()
 
     def stop(self):
         with QMutexLocker(self.mutex):

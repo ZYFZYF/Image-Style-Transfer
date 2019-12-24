@@ -6,10 +6,10 @@ import time
 import numpy as np
 
 image_border_style = 'border-width: 2px;border-style: solid;border-color: rgb(0, 0, 0);'
-if not os.path.exists('read/'):
-    os.mkdir('read/')
-if not os.path.exists('write/'):
-    os.mkdir('write/')
+if not os.path.exists('image/'):
+    os.mkdir('image/')
+if not os.path.exists('video/'):
+    os.mkdir('video/')
 
 
 # 这里的path也可能是打开的PIL Image
@@ -37,10 +37,9 @@ def get_scaled_pixmap(path):
     return QPixmap(image.scaled(256, 256))
 
 
-def generate_temp_read_image_path():
-    return 'read/' + str(int(time.time() * 1000)) + '.jpg'
+def generate_temp_image_path():
+    return 'image/' + str(int(time.time() * 1000)) + '.jpg'
 
 
-def generate_temp_write_image_path():
-    return 'write/' + str(int(time.time() * 1000)) + '.jpg'
-# return (TEMP_DIR + str(int(time.time() * 1000)) + '.jpg').replace('\\', '/')
+def generate_temp_video_path():
+    return 'video/' + str(int(time.time() * 1000)) + '.mp4'
