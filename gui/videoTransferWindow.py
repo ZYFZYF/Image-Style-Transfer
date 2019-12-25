@@ -82,7 +82,7 @@ class Transfer(QThread):
         print('prepare to transfer')
         # 先开启设备/打开视频
         total_transfer_frames = int(start_capture(self.parent.content_path))
-        if total_transfer_frames == 0:
+        if total_transfer_frames == -1:
             total_transfer_frames = '∞'
         # 设置输出结果的格式
         four_cc = cv2.VideoWriter_fourcc(*'mp4v')
