@@ -11,9 +11,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_SelectAlgorithm(object):
     def setupUi(self, SelectAlgorithm):
         SelectAlgorithm.setObjectName("SelectAlgorithm")
-        SelectAlgorithm.resize(400, 216)
+        SelectAlgorithm.resize(470, 263)
         self.verticalLayoutWidget = QtWidgets.QWidget(SelectAlgorithm)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(60, 40, 278, 80))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(70, 50, 341, 80))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -29,7 +29,7 @@ class Ui_SelectAlgorithm(object):
         self.Johnson.setObjectName("Johnson")
         self.verticalLayout.addWidget(self.Johnson)
         self.horizontalLayoutWidget = QtWidgets.QWidget(SelectAlgorithm)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(80, 130, 226, 80))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(120, 160, 226, 80))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)

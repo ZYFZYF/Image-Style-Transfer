@@ -1,4 +1,4 @@
-# from Gatys.transfer import VggFeatureExtractor
+from Gatys.transfer import VggFeatureExtractor
 from utils import *
 from tqdm import tqdm
 from config import Johnson
@@ -8,26 +8,6 @@ import torch.nn as nn
 import time
 from Johnson.transfer import transfer
 from torchvision import models
-
-
-class VggFeatureExtractor(nn.Module):
-    def __init__(self):
-        super(VggFeatureExtractor, self).__init__()
-        self.content_layer = '8'  # relu2_2
-        self.style_layers = ['3', '8', '15', '22']  # relu1_2, relu2_2, relu3_3, and relu4_3
-        self.vgg_model = models.vgg16(pretrained=True).features
-        # print(self.vgg_model)
-
-    def forward(self, x):
-        content = None
-        style = []
-        for k, v in self.vgg_model._modules.items():
-            x = v(x)
-            if k in self.style_layers:
-                style.append(x)
-            if k == self.content_layer:
-                content = x
-        return content, style
 
 
 def train(style_path, verbose=True):
